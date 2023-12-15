@@ -72,24 +72,27 @@ def eliminate(a,b,s,n,tol):
             factor =Decimal(a[i][k])/Decimal(a[k][k])
             for j in range(0,n):
                 a[i][j]=Decimal(a[i][j])-(Decimal(factor)*Decimal(a[k][j]))
+            b[i]=Decimal(b[i])-Decimal(factor)*Decimal(b[k])
             steps.append([get_matrix(a,b),
                       "Add("+"R"+str(i+1)+"+"+str(-float(factor))+"R"+str(k+1)+")"])
-            b[i]=Decimal(b[i])-Decimal(factor)*Decimal(b[k])
 
     if abs(a[n-1][n-1]/Decimal(s[n-1])) < tol :
         return -1
 
 def substitute(a,b,n,x):
     x[n-1]=Decimal(b[n-1])/Decimal(a[n-1][n-1])
+    steps.append([[],"value of x"+str(n)+"="+str(float(b[n-1]))+" / "+str(float(a[n-1][n-1]))+" = "+str(float(x[n-1]))])
     for i in range(n-2,-1,-1):
         sum=Decimal(0)
         for j in range(i+1,n):
             sum = sum+ Decimal(a[i][j])*Decimal(x[j])
         x[i]=(Decimal(b[i])-sum)/Decimal(a[i][i])
+        steps.append([[],"value of x"+str(i+1)+"="+str(float(b[i]))+"-"+str(float(sum))+" / "+str(float(a[i][i]))+" = "+str(float(x[i]))])
+        
 
 
-matrix=[[1,2,3,10],[4,5,6,11],[7,8,9,12]]
-x=gauss_elimination(matrix,3,3)
+matrix=[[0,2,3,10],[0,5,6,11],[1,1,1,12]]
+x=gauss_elimination(matrix,3,5)
 for step in steps:
     print(step[1])
     print_matrix(step[0])
