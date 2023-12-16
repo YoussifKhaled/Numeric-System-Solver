@@ -8,14 +8,20 @@ def main():
         row = [x for x in input().split()]
         matrix.append(row)
 
-    values, steps = gj.gauss_jordan_elimination(matrix)
+    try:
+        values, steps = gj.gauss_jordan_elimination(matrix,2)
+    except ValueError as e:
+        print(e)
+        return
+    
     print("Solution:")
     for i in range(size):
         print("x"+str(i+1)+" = "+str(values[i]))
     print("Steps:")
     for step in steps:
         print(step[1])
-        print(step[0])
+        for row in step[0]:
+            print(row)
         print()
 
 if __name__ == "__main__":
