@@ -61,16 +61,15 @@ def gauss_jordan_elimination(matrix, precision = 5):
                 factor = matrix[i][row]
                 for j in range(row, dim+1):
                     matrix[i][j] -= factor * matrix[row][j]
+                #Checking for consistency
                 val_max_check = max(abs(x) for x in matrix[i][:dim])
                 if val_max_check == Decimal('0'):
                     if matrix[i][dim] != Decimal('0'):
                         raise ValueError("Matrix is inconsistent,No solution")
                     else:
                         raise ValueError("Infinite solutions")
-                if factor == Decimal('0'):
-                    continue
-                steps.append([get_matrix(matrix),"Adding ("+str(-factor)+")*R"+str(row+1)+" to R"+str(i+1)])
-
+                if factor != Decimal('0'):
+                    steps.append([get_matrix(matrix),"Adding ("+str(-factor)+")*R"+str(row+1)+" to R"+str(i+1)])
     #Solution
     values = []
     for row in matrix:

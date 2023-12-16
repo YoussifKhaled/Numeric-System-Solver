@@ -9,7 +9,7 @@ def main():
         matrix.append(row)
 
     try:
-        values, steps = gj.gauss_jordan_elimination(matrix,2)
+        values, steps = gj.gauss_jordan_elimination(matrix)
     except ValueError as e:
         print(e)
         return
