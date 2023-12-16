@@ -1,4 +1,26 @@
+#switch rows that have a zero in the diagonal element
+def remove_zero_diagonals(A):
+
+  for i in range(len(A)):
+    if A[i][i] == 0:
+      if i == len(A) - 1:
+        x = i
+        for j in range(i - 1, -1, -1):
+          x -= 1
+          if A[j][i] != 0 and A[i][x] != 0:
+            A[i], A[j] = A[j], A[i]
+            break
+      else:
+        for j in range(i + 1, len(A)):
+          if A[j][i] != 0:
+            A[i], A[j] = A[j], A[i]
+            break         
+
+
 def jacobi(A, initialGuess, iterations, tol, precision=5):
+
+  remove_zero_diagonals(A)
+  
   x = initialGuess
   relativeError = 1
   steps = []
@@ -17,7 +39,12 @@ def jacobi(A, initialGuess, iterations, tol, precision=5):
         else:
           denominator = A[i][j]
 
-      x[i] = round(numerator / denominator, precision - len(str(int(temp[i]))))
+      if denominator == 0:
+        steps.append("Cant't solve using jacobi, diagonals elements are zero")
+        return -1, steps
+      else:
+        x[i] = round(numerator / denominator,
+                     precision - len(str(int(temp[i]))))
 
     for i in range(len(x)):
       if x[i] != 0:
@@ -32,14 +59,12 @@ def jacobi(A, initialGuess, iterations, tol, precision=5):
   return x, steps
 
 
-A = [
-    [20, 3, 4, -5,-6],
-    [6, 20, -8, 9,96],
-    [10, 11, 40, 13,312],
-    [14, 15, 16, 50,416]
-]
-ans, steps = jacobi(A, [0,0,0,0], 20, 0.001, 7)
-print(ans)
+# A = [[1, 0 ,0, 10],                   
+#      [1, 1, 0,16 ],                 
+#      [0, 0, 1,3]                    
+#     ]
 
-for step in steps:
-  print(step)
+# ans, steps = jacobi(A, [1, 1, 1], 20, 0.001, 7)
+# print(ans)
+# for steps in steps:
+#   print(steps)
