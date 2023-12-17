@@ -11,7 +11,8 @@ def gauss_jordan_elimination(matrix, precision = 5):
 
     getcontext().prec = precision
     getcontext().rounding = 'ROUND_HALF_UP'
-
+    Infinite_flag = False
+    
     matrix = [[Decimal(element) for element in row] for row in matrix] #Converting to decimal
     dim = len(matrix)
 
@@ -27,7 +28,8 @@ def gauss_jordan_elimination(matrix, precision = 5):
             if matrix[row][dim] != Decimal('0'):
                 raise ValueError("Matrix is inconsistent,No solution")
             else:
-                raise ValueError("Infinite solutions")
+                Infinite_flag = True
+                continue
         for col in range(dim+1):
             scaled_matrix[row][col] /= coef_max
     steps.append([get_matrix(scaled_matrix),"Scaling the matrix"])
@@ -69,9 +71,12 @@ def gauss_jordan_elimination(matrix, precision = 5):
                     if matrix[i][dim] != Decimal('0'):
                         raise ValueError("Matrix is inconsistent,No solution")
                     else:
-                        raise ValueError("Infinite solutions")
+                        Infinite_flag = True
+                        continue
                 if factor != Decimal('0'):
                     steps.append([get_matrix(matrix),"Adding ("+str(-factor)+")*R"+str(row+1)+" to R"+str(i+1)])
+    if Infinite_flag:
+        raise ValueError("Infinite Solutions")
     #Solution
     values = []
     for row in matrix:
