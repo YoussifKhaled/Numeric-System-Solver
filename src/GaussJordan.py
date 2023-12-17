@@ -10,6 +10,8 @@ def get_matrix(matrix):
 def gauss_jordan_elimination(matrix, precision = 5):
 
     getcontext().prec = precision
+    getcontext().rounding = 'ROUND_HALF_UP'
+
     matrix = [[Decimal(element) for element in row] for row in matrix] #Converting to decimal
     dim = len(matrix)
 
