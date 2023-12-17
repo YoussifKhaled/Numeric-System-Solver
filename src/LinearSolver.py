@@ -14,7 +14,7 @@ class LinearSolverEngine:
     def solve(self):
         if self.method == 'Gauss-Jordan':
             solver = GaussJordanElimination(self.matrix, self.precision)
-            return solver.solve()
+            return solver.gauss_jordan_elimination()
         elif self.method == 'Gauss Elimination':
             print("hnaa")
             solver = GaussElimination(self.matrix, self.precision)
