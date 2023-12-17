@@ -1,6 +1,7 @@
 from GaussJordanClass import GaussJordanElimination
 from GaussEliminationClass import GaussElimination
 from JacobiClass import JacobiSolver
+from GaussSeidelClass import GaussSeidelSolver
 class LinearSolverEngine:
     def __init__(self, method, matrix, initial_guess=None, iterations=None, tol=None, precision=5):
         self.method = method
@@ -21,13 +22,16 @@ class LinearSolverEngine:
         elif self.method == 'Jacobi-Iteration':
             solver = JacobiSolver(self.matrix, self.initial_guess, self.iterations, self.tol, self.precision)
             return solver.jacobi()
+        elif self.method == 'Gauss-Seidel':
+            solver = GaussSeidelSolver(self.matrix, self.tol, self.precision, self.initial_guess, self.iterations)
+            return solver.gauss_seidel()
         else:
-            raise ValueError("Invalid method. Supported methods: 'Gauss-Jordan', 'Gauss Elimination', 'Jacobi-Iteration'")
+            raise ValueError("Invalid method. Supported methods: 'Gauss-Jordan', 'Gauss Elimination', 'Jacobi-Iteration,Gauss-Seidel'")
 
 
     def format_steps(self, steps):
         formatted_steps = ""
-        if self.method == 'Jacobi-Iteration':
+        if self.method == 'Jacobi-Iteration' or self.method == 'Gauss-Seidel':
             for step in steps:
                 formatted_steps += f"{step}\n"
             return formatted_steps

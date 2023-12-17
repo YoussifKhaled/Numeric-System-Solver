@@ -352,6 +352,9 @@ class MatrixInputApp(QWidget):
 
             self.equation_layout.addWidget(self.initial_guess_label)
             self.equation_layout.addLayout(self.initial_guess_layout)
+        
+        self.steps_label.setText("Hi")
+        self.answers_label.setText("Hi")
 
 
     def solve_clicked(self):
@@ -370,6 +373,8 @@ class MatrixInputApp(QWidget):
             for i in range(self.initial_guess_layout.count()):
                 initial_guess_widget = self.initial_guess_layout.itemAt(i).widget()
                 if isinstance(initial_guess_widget, QLineEdit):
+                    if initial_guess_widget.text() == '':
+                        initial_guess_widget.setText('0')
                     initial_guess_values.append(float(initial_guess_widget.text()))
             print(f"Values: {initial_guess_values}")
 
@@ -380,6 +385,8 @@ class MatrixInputApp(QWidget):
                 row_data = []
                 for j in range(self.table.columnCount()):
                     item = self.table.item(i, j)
+                    if item.text() == '':
+                        item.setText('0')
                     row_data.append(float(item.text()))
                 print(f"Row {i + 1}: {row_data}")
 
@@ -389,7 +396,10 @@ class MatrixInputApp(QWidget):
             for i in range(self.equation_count):
                 equation_data = []
                 for j in range(self.equation_count):
+                    
                     coefficient_input = self.coefficient_inputs[i * self.equation_count + j]
+                    if coefficient_input.text() == '':
+                        coefficient_input.setText('0')
                     equation_data.append(float(coefficient_input.text()))
                 answer_input = self.equations.itemAt(i).itemAt(self.equation_count * 2 + 2).widget()
                 print(f"Equation {i + 1}: Coefficients={equation_data}, Answer={float(answer_input.text())}")
@@ -415,6 +425,8 @@ class MatrixInputApp(QWidget):
             ans, steps = engine.solve()
         except ValueError as e:
             print(f"Error: {e}")
+            self.steps_label.setText(f"Error: {e}")
+            self.answers_label.setText(f"Error: {e}")
             return
         print(f"Answer: {ans}")
         print("Steps:")
