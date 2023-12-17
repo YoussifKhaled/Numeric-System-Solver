@@ -304,7 +304,7 @@ class MatrixInputApp(QWidget):
 
     def get_actual_abs_relative_error(self):
         # Calculate the actual value from the spin box value
-        return 10 ** -self.abs_relative_error_spinbox.value()
+        return 10 ** -self.current_abs_relative_error
     def submit_clicked(self):
         self.equation_count = int(self.equation_count_input.text())
         if self.equations is not None:
@@ -412,12 +412,12 @@ class MatrixInputApp(QWidget):
 
 
         engine = LinearSolverEngine(
-            method=self.method_combobox.currentText(),
+            method=self.current_method,
             matrix=self.get_matrix_data(),
             initial_guess=initial_guess_values,
-            iterations=self.max_iterations_spinbox.value(),
+            iterations=self.current_max_iterations,
             tol=self.get_actual_abs_relative_error(),
-            precision=self.significant_digits_spinbox.value()
+            precision=self.current_significant_digits
         )
 
         # Solve the linear system and get results
