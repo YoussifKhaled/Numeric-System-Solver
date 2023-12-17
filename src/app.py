@@ -1,6 +1,8 @@
 import sys
+import time
 from PyQt5.QtWidgets import QApplication, QTableWidget, QTableWidgetItem, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QRadioButton, QGroupBox, QComboBox, QSpinBox, QDoubleSpinBox, QScrollArea, QDesktopWidget
 from PyQt5 import QtGui
+import qtpy
 
 from LinearSolver import LinearSolverEngine
 
@@ -47,6 +49,8 @@ class MatrixInputApp(QWidget):
 
         # Set window opacity
         self.setWindowOpacity(0.92)
+        self.last_runtime_label = QLabel('Last Runtime: N/A')
+        self.last_runtime_label.setStyleSheet('color: #ffbb00')  # Set text color to yellow
 
         # Input settings group box
         input_settings_groupbox = QGroupBox('Input Settings')
@@ -188,6 +192,7 @@ class MatrixInputApp(QWidget):
         main_layout.addWidget(self.solve_button)
         main_layout.addWidget(steps_scroll_area)
         main_layout.addWidget(answer_scroll_area)
+        main_layout.addWidget(self.last_runtime_label)  # Add the Last Runtime label
 
         # Additional layouts
         self.setLayout(main_layout)
@@ -422,7 +427,14 @@ class MatrixInputApp(QWidget):
 
         # Solve the linear system and get results
         try:
+            start_time = time.time() 
             ans, steps = engine.solve()
+            end_time = time.time()  # Measure the end time
+            runtime = end_time - start_time
+
+            # Update the Last Runtime label
+            self.last_runtime_label.setText(f'Last Runtime: {runtime:.4f} seconds')
+
         except ValueError as e:
             print(f"Error: {e}")
             self.steps_label.setText(f"Error: {e}")
