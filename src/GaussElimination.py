@@ -74,6 +74,8 @@ def eliminate(a,b,s,n,tol):
             factor =(a[i][k])/(a[k][k])
             for j in range(0,n):
                 a[i][j]=(a[i][j])-((factor)*(a[k][j]))
+                if (abs(a[i][j]) < Decimal('10')** -getcontext().prec):
+                    a[i][j]=Decimal('0')
             b[i]=(b[i])-(factor)*(b[k])
             steps.append([get_matrix(a,b),
                       "Add("+"R"+str(i+1)+"+"+str(-float(factor))+"R"+str(k+1)+")"])
