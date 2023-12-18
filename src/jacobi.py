@@ -57,14 +57,3 @@ def jacobi(A, initialGuess, iterations, tol, precision=5):
     count += 1
 
   return x, steps
-
-
-# A = [[1, 0 ,0, 10],                   
-#      [1, 1, 0,16 ],                 
-#      [0, 0, 1,3]                    
-#     ]
-
-# ans, steps = jacobi(A, [1, 1, 1], 20, 0.001, 7)
-# print(ans)
-# for steps in steps:
-#   print(steps)

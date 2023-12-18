@@ -13,6 +13,12 @@ class GaussJordanElimination:
         return [[float(element) for element in row] for row in matrix]
 
     def gauss_jordan_elimination(self):
+        
+        for row in matrix:
+            for element in row:
+                if not element.isdigit():
+                    return self.gauss_jordan_Literals(matrix), []
+        
         Infinite_flag = False
 
         matrix = [[Decimal(element) for element in row] for row in self.matrix]  # Converting to decimal
@@ -88,14 +94,22 @@ class GaussJordanElimination:
     def getcontext(self):
         return getcontext()
 
+    def gauss_jordan_Literals(matrix):
+        matrix = [[str(element) for element in row] for row in matrix]
+        dim = len(matrix)
+        
+        for i in range(dim):
 
-# # Example usage
-# A = [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]]
-# solver = GaussJordanElimination(A, 5)
-# ans, steps = solver.gauss_jordan_elimination()
-#
-# print(ans)
-# for step in steps:
-#     print(step[1])
-#     for row in step[0]:
-#         print(row)
+            if matrix[i][i] != '0':
+                for j in range(i, dim+1):
+                    matrix[i][j] = '(' + matrix[i][j] + ')/' + matrix[i][i]
+            
+            for k in range(dim):
+                if k != i:
+                    for j in range(i, dim+1):
+                        matrix[k][j] = matrix[k][j] + '-(' + matrix[k][i] + ')*' + matrix[i][j]
+        
+        values = []
+        for row in matrix:
+            values.append(row[-1])
+        return values

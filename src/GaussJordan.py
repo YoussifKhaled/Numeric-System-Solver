@@ -1,5 +1,5 @@
 from decimal import Decimal, getcontext
-
+ 
 #Gets matrix values as float
 def get_matrix(matrix):
     return [[float(element) for element in row] for row in matrix]
@@ -9,6 +9,11 @@ def get_matrix(matrix):
 #returns {values list, steps list}
 def gauss_jordan_elimination(matrix, precision = 5):
 
+    for row in matrix:
+        for element in row:
+            if not element.isdigit():
+                return gauss_jordan_Literals(matrix), []
+    
     getcontext().prec = precision
     getcontext().rounding = 'ROUND_HALF_UP'
     Infinite_flag = False
@@ -83,3 +88,27 @@ def gauss_jordan_elimination(matrix, precision = 5):
         values.append(float(row[-1]))
 
     return values, steps
+
+#Gauss-Jordan elimination func for literals
+#arguments {augmented matrix}
+#returns {values list}
+def gauss_jordan_Literals(matrix):
+    matrix = [[str(element) for element in row] for row in matrix]
+    dim = len(matrix)
+    
+    for i in range(dim):
+
+        if matrix[i][i] != '0':
+            for j in range(i, dim+1):
+                matrix[i][j] = '(' + matrix[i][j] + ')/' + matrix[i][i]
+        
+        for k in range(dim):
+            if k != i:
+                for j in range(i, dim+1):
+                    matrix[k][j] = matrix[k][j] + '-(' + matrix[k][i] + ')*' + matrix[i][j]
+    
+    values = []
+    for row in matrix:
+        values.append(row[-1])
+    
+    return values

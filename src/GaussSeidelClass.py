@@ -78,16 +78,3 @@ class GaussSeidelSolver:
             raise ValueError("Does not converge")
         else:
             return values, self.steps
-
-
-# Example usage
-solver = GaussSeidelSolver(matrix=[[10, 2, 3, 1], [1, 6, 2, 2], [4, 8, 12, 3]], precision=7, tol=0.01,
-                           initial_cond=[1, 1, 1], max_iterations=10000)
-result, steps = solver.gauss_seidel()
-
-if result is None:
-    print("Does not converge")
-else:
-    print(result)
-    for step in steps:
-        print(step)

@@ -45,8 +45,6 @@ class JacobiSolver:
 
                 if denominator == 0:
                     raise ValueError("Can't solve using Jacobi, diagonal elements are zero")
-                    steps.append("Can't solve using Jacobi, diagonal elements are zero")
-                    return -1, steps
                 else:
                     x[i] = round(numerator / denominator,
                                  self.precision - len(str(int(temp[i]))))
@@ -62,17 +60,3 @@ class JacobiSolver:
             count += 1
 
         return x, steps
-
-
-# # Example usage
-# A = [[1, 0, 0, 10],
-#      [1, 1, 0, 16],
-#      [0, 0, 1, 3]
-#      ]
-
-# solver = JacobiSolver(A, [1, 1, 1], 20, 0.01, 7)
-# ans, steps = solver.jacobi()
-
-# print(ans)
-# for step in steps:
-#     print(step)
