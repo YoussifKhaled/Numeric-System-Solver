@@ -87,15 +87,3 @@ class GaussJordanElimination:
 
     def getcontext(self):
         return getcontext()
-
-
-# # Example usage
-# A = [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]]
-# solver = GaussJordanElimination(A, 5)
-# ans, steps = solver.gauss_jordan_elimination()
-#
-# print(ans)
-# for step in steps:
-#     print(step[1])
-#     for row in step[0]:
-#         print(row)
