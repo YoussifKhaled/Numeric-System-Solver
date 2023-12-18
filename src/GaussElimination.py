@@ -2,9 +2,6 @@ from decimal import Decimal,getcontext
 getcontext().rounding='ROUND_HALF_UP'
 steps=[]
 
-def print_matrix(matrix):
-    for row in matrix:
-        print([float (element) for element in row])
 def get_matrix(a,b):
     return [[float(element) for element in row] + [float(constant)] for row, constant in zip(a, b)]
 
@@ -77,6 +74,8 @@ def eliminate(a,b,s,n,tol):
             factor =(a[i][k])/(a[k][k])
             for j in range(0,n):
                 a[i][j]=(a[i][j])-((factor)*(a[k][j]))
+                if (abs(a[i][j]) < Decimal('10')** -getcontext().prec):
+                    a[i][j]=Decimal('0')
             b[i]=(b[i])-(factor)*(b[k])
             steps.append([get_matrix(a,b),
                       "Add("+"R"+str(i+1)+"+"+str(-float(factor))+"R"+str(k+1)+")"])
@@ -95,6 +94,6 @@ def substitute(a,b,n):
             sum = sum+ (a[i][j])*(x[j])
         x[i]=((b[i])-sum)/(a[i][i])
         steps.append([[],"value of x"+str(i+1)+"="+str(float(b[i]))+"-"+str(float(sum))+" / "+str(float(a[i][i]))+" = "+str(float(x[i]))])
-    return x
+    return [float(element) for element in x]
 
 

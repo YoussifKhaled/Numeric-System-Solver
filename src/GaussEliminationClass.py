@@ -8,10 +8,6 @@ class GaussElimination:
         self.precision = precision
         getcontext().prec = precision
 
-    def print_matrix(self, matrix):
-        for row in matrix:
-            print([float(element) for element in row])
-
     def get_matrix(self, a, b):
         return [[float(element) for element in row] + [float(constant)] for row, constant in zip(a, b)]
 
@@ -85,6 +81,8 @@ class GaussElimination:
                 factor = (a[i][k]) / (a[k][k])
                 for j in range(0, n):
                     a[i][j] = (a[i][j]) - ((factor) * (a[k][j]))
+                    if abs(a[i][j]) < Decimal('10')** -self.precision:
+                        a[i][j]=Decimal('0')
                 b[i] = (b[i]) - (factor) * (b[k])
                 self.steps.append([self.get_matrix(a, b),
                                    f"Add(R{i + 1} + {-float(factor)} * R{k + 1})"])
@@ -105,19 +103,4 @@ class GaussElimination:
                 _sum = _sum + (a[i][j]) * (x[j])
             x[i] = ((b[i]) - _sum) / (a[i][i])
             self.steps.append([[], f"value of x{i + 1} = {float(b[i])} - {_sum} / {float(a[i][i])} = {float(x[i])}"])
-        return x
-
-
-# # Example usage
-A = [[1.0, 0.0, 0.0, 10.0],
-[0.0, 1.0, 0.0, 11.0],
-[0.0, 0.0, 1.0, 12.0]
-]
-solver = GaussElimination(A, 1)
-ans, steps = solver.solve()
-
-print(ans)
-for step in steps:
-    print(step[1])
-    for row in step[0]:
-        print(row)
+        return [float(element) for element in x]

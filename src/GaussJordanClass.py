@@ -1,20 +1,20 @@
 from decimal import Decimal, getcontext
 
 class GaussJordanElimination:
-    def __init__(self, matrix, precision=5):
+    def __init__(self, matrix, precision):
         self.matrix = matrix
         self.precision = precision
         self.steps = []
         self.dim = len(matrix)
-        getcontext().prec = precision
-        getcontext().rounding = 'ROUND_HALF_UP'
 
     def get_matrix(self, matrix):
         return [[float(element) for element in row] for row in matrix]
 
     def gauss_jordan_elimination(self):
+        
+        getcontext().prec = self.precision
+        getcontext().rounding = 'ROUND_HALF_UP'
         Infinite_flag = False
-
         matrix = [[Decimal(element) for element in row] for row in self.matrix]  # Converting to decimal
         dim = len(matrix)
 
@@ -67,6 +67,8 @@ class GaussJordanElimination:
                     factor = matrix[i][row]
                     for j in range(row, dim + 1):
                         matrix[i][j] -= factor * matrix[row][j]
+                        if abs(matrix[i][j]) < Decimal('10') ** -self.precision:
+                            matrix[i][j] = Decimal('0')
                     # Checking for consistency
                     val_max_check = max(abs(x) for x in matrix[i][:dim])
                     if val_max_check == Decimal('0'):
@@ -84,18 +86,3 @@ class GaussJordanElimination:
         values = [float(row[-1]) for row in matrix]
 
         return values, self.steps
-
-    def getcontext(self):
-        return getcontext()
-
-
-# # Example usage
-# A = [[1, 2, 3, 4], [2, 3, 4, 5], [3, 4, 5, 6]]
-# solver = GaussJordanElimination(A, 5)
-# ans, steps = solver.gauss_jordan_elimination()
-#
-# print(ans)
-# for step in steps:
-#     print(step[1])
-#     for row in step[0]:
-#         print(row)
