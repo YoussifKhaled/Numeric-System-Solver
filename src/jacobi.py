@@ -56,15 +56,20 @@ def jacobi(A, initialGuess, iterations, tol, precision=5):
     iterations -= 1
     count += 1
 
+  if relativeError >= tol:
+    steps.clear()
+    steps.append("This system of equations will not converge")
+    return -1,steps
+
   return x, steps
 
 
-# A = [[1, 0 ,0, 10],                   
-#      [1, 1, 0,16 ],                 
-#      [0, 0, 1,3]                    
+# A = [[2,1,6, 9],                   
+#      [8, 3, 2,13 ],                 
+#      [1, 5, 1,7]                    
 #     ]
 
-# ans, steps = jacobi(A, [1, 1, 1], 20, 0.001, 7)
+# ans, steps = jacobi(A, [0, 0, 0], 100, 0.00001, 5)
 # print(ans)
 # for steps in steps:
 #   print(steps)
