@@ -16,7 +16,7 @@ def ROUND_SIG(n, sig_figs):
     else:
         return 0.0
     
-def Crout(a, sig_figs):
+def Croutdec(a, sig_figs):
     steps = []  # Initialize an empty list to store steps
     n = len(a)
     l = np.zeros((n, n))
@@ -33,20 +33,19 @@ def Crout(a, sig_figs):
         # print(f"in Step {k + 1}:")
         for i in range(0,k+1):
             # tmp_sum += ROUND_SIG(l[i][j] * u[j][k], sig_figs)
-            l[k][i] = a[k][i] - np.dot(l[k, :i], u[:i, i])
+            tmp_sum = ROUND_SIG(np.dot(l[k, :i], u[:i, i]) ,sig_figs)
+            l[k][i] = ROUND_SIG(a[k][i] - tmp_sum ,sig_figs)
             # print(f"l[{k+1}][{i+1}] = a[{k+1}][{i+1}]({a[k][i]}) - {np.dot(l[k, :i], u[:i, k])}")
-            steps.append(f"l[{k+1}][{i+1}] = a[{k+1}][{i+1}]({a[k][i]}) - {np.dot(l[k, :i], u[:i, k])}")
+            steps.append(f"l[{k+1}][{i+1}] = a[{k+1}][{i+1}]({a[k][i]}) - {tmp_sum}")
         for j in range(1+k,n):
             # Calculate L element
-            u[k][j] = (a[k][j] - np.dot(l[k, :k], u[:k, j])) / l[k][k]
+            tmp_sum = ROUND_SIG(np.dot(l[k, :k], u[:k, j]),sig_figs)
+            u[k][j] = ROUND_SIG(ROUND_SIG((a[k][j] - tmp_sum),sig_figs) / l[k][k],sig_figs)
             # print(f"u[{k+1}][{j+1}] = (a[{k+1}][{j+1}]({a[k][j]}) - {np.dot(l[k, :k], u[:k, j])}) / L[{k+1}][{k+1}]({l[k][k]})")
-            steps.append(f"u[{k+1}][{j+1}] = (a[{k+1}][{j+1}]({a[k][j]}) - {np.dot(l[k, :k], u[:k, j])}) / L[{k+1}][{k+1}]({l[k][k]})")
-            # print("l = ", l)
-            # print("u = ", u)
-            # print()
+            steps.append(f"u[{k+1}][{j+1}] = (a[{k+1}][{j+1}]({a[k][j]}) - {tmp_sum}) / L[{k+1}][{k+1}]({l[k][k]})")
         steps.append(f"l = {l}")
         steps.append(f"u = {u}")
-    return l, u, steps
+    return l, u
 
 
 
@@ -108,14 +107,14 @@ def isSquare(a):
 def isSing(a, sig_figs):
     return ROUND_SIG(LA.det(a),sig_figs) == 0
 
-def main():
+def crout():
     a = np.array([[1, 1, 2], [-1, -2, 3], [3, 7, 4]])
     b = np.array([8,1,10])
     sig_figs = 20  # Specify the number of significant figures
     if isSquare(a):
         if not isSing(a,sig_figs):
             try:
-                l, u = Crout(a, sig_figs)
+                l, u = Croutdec(a, sig_figs)
                 steps.append(f"LU decomposition completed: L = {l} and U = {u}")
 
 
@@ -130,7 +129,8 @@ def main():
                 print("a= ",np.dot(l,u))
                 print("x = ", x)
             except ValueError as e:
-                raise ValueError("Error:", str(e))
+                # ValueError(e)
+                print("Error in the middle of calculations:"+ str(e))
         else:
             raise ValueError("a is singular")
     else:
@@ -139,4 +139,4 @@ def main():
 
 
 
-main()
+crout()

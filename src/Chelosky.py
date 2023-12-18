@@ -18,7 +18,7 @@ def ROUND_SIG(n, sig_figs):
 
 
 # Define the Cholesky decomposition function
-def Cholesky(a, sig_figs):
+def Choleskydec(a, sig_figs):
     steps = []  # Initialize an empty list to store steps
     n = len(a)
     l = np.zeros((n, n))
@@ -32,21 +32,14 @@ def Cholesky(a, sig_figs):
                 steps.append(f"Step {i + 1}:")
                 steps.append(f"l[{i}][{k}] = sqrt(a[{i}][{i}] - {tmp_sum})")
                 steps.append(f"u[{k}][{i}] = l[{i}][{k}]")
-                # print(f"Step {i + 1}:")
-                # print(f"l[{i}][{k}] = sqrt(a[{i}][{i}] - {tmp_sum})")
-                # print(f"u[{k}][{k}] = l[{i}][{k}]")
+                
             else:
                 l[i][k] = ROUND_SIG(ROUND_SIG(a[i][k] - tmp_sum, sig_figs) / ROUND_SIG(l[k][k], sig_figs), sig_figs)
                 u[k][i] = l[i][k]
                 steps.append(f"Step {i + 1}:")
                 steps.append(f"l[{i}][{k}] = (a[{i}][{k}] - {tmp_sum}) / (u[{k}][{k}] * l[{i}][{k}])")
                 steps.append(f"u[{k}][{i}] = l[{i}][{k}]")
-            #     print(f"Step {i + 1}:")
-            #     print(f"l[{i}][{k}] = (a[{i}][{k}] - {tmp_sum}) / (u[{k}][{k}] * l[{i}][{k}])")
-            #     print(f"u[{k}][{i}] = l[{i}][{k}]")
-            # print(f"l = {l}")
-            # print(f"u = {u}")
-            # print("")
+            
     return l, u
 
 # Define the forward substitution function
@@ -90,7 +83,7 @@ def isSquare(a):
 def isSing(a,sig_figs):
     return ROUND_SIG(LA.det(a),sig_figs) == 0
 
-def main():
+def cholesky():
     a = np.array([[6, 15, 55],
                   [15, 55, 225],
                   [55, 225, 979]])
@@ -101,7 +94,7 @@ def main():
             if isSymmetric(a):
                 if isPositiveDefinite(a):
                     try:
-                        l, u = Cholesky(a, sig_figs)
+                        l, u = Choleskydec(a, sig_figs)
                         steps.append(f"LU decomposition completed: L = {l} and U = {u}")
 
                         # steps.append(f"Error calculated: ||A - LU|| = {calculateError(a, l, u)}")
@@ -117,7 +110,7 @@ def main():
                         # calculateError(a, l, u)
 
                     except ValueError as e:
-                        raise ValueError("Error:", str(e))
+                        raise ValueError("Error in the middle of calculations:", e)
                 else:
                     raise ValueError("a is not positive definite")
             else:
@@ -127,4 +120,4 @@ def main():
     else:
         raise ValueError("a is not square")
 
-main()
+cholesky()

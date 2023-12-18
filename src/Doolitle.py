@@ -18,7 +18,7 @@ def ROUND_SIG(n, sig_figs):
         return 0.0
 
 
-def DecomposeEasier(a, n, sig_figs):
+def Decompose(a, n, sig_figs):
     steps=[] #reset steps
     l = np.zeros((n, n))
     u = np.zeros((n, n))
@@ -104,7 +104,30 @@ def substitute(l, u, b, sig_figs):
 
     return x
 
-
+def pivot(a,b,s,n,k):
+    p=k
+    big=abs((a[k][k])/(s[k]))
+    for  i in range(k+1,n):
+        temp=abs((a[i][k])/(s[i]))
+        if temp > big:
+           big=temp
+           p=i
+    if p !=k:
+        # swap row p & row k
+        for j in range(k,n):
+            temp= a[p][j]
+            a[p][j]=a[k][j]
+            a[k][j]=temp
+        # swap b[p] & b[k]
+        temp=b[p]
+        b[p]=b[k]
+        b[k]=temp
+        # swap s[p] & s[k]
+        temp=s[p]
+        s[p]=s[k]
+        s[k]=temp
+        steps.append([
+                      "applying Pivoting ("+"R"+str(p+1)+"<->"+"R"+str(k+1)+")"])
 def pivot(a, o, s, n, k, sig_figs):
     p = k
     big = ROUND_SIG(abs(a[int(o[k])][k] / s[int(o[k])]), sig_figs)
@@ -144,7 +167,7 @@ def main():
     if isSquare(a):
         if not isSing(a):
             try:
-                l, u = DecomposeEasier(a, len(a), sig_figs)
+                l, u = Decompose(a, len(a), sig_figs)
                 steps.append(f"LU decomposition completed: L = {l} and U = {u}")
 
 
