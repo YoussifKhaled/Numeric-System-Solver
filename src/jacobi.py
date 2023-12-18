@@ -64,12 +64,12 @@ def jacobi(A, initialGuess, iterations, tol, precision=5):
   return x, steps
 
 
-# A = [[2,1,6, 9],                   
-#      [8, 3, 2,13 ],                 
-#      [1, 5, 1,7]                    
-#     ]
+A = [[2,1,6, 9],                   
+     [8, 3, 2,13 ],                 
+     [1, 5, 1,7]                    
+    ]
 
-# ans, steps = jacobi(A, [0, 0, 0], 100, 0.00001, 5)
-# print(ans)
-# for steps in steps:
-#   print(steps)
+ans, steps = jacobi(A, [0, 0, 0], 100, 0.00001, 5)
+print(ans)
+for steps in steps:
+  print(steps)

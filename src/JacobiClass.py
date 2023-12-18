@@ -44,7 +44,6 @@ class JacobiSolver:
                         denominator = self.A[i][j]
 
                 if denominator == 0:
-                    raise ValueError("Can't solve using Jacobi, diagonal elements are zero")
                     steps.append("Can't solve using Jacobi, diagonal elements are zero")
                     return -1, steps
                 else:
@@ -56,23 +55,27 @@ class JacobiSolver:
                     error = abs(x[i] - temp[i]) / abs(x[i])
                     relative_error = max(relative_error, error)
 
-            step = f"Iteration number {count}: x = {x}, relativeError = {round(relative_error*100, 5)}%"
+            step = f"iteration number {count}: x = {x}, relative_error = {round(relative_error*100, 5)}%"
             steps.append(step)
             self.iterations -= 1
             count += 1
 
+        if relative_error >= self.tol:
+            steps.clear()
+            steps.append("This system of equations will not converge")
+            return -1, steps
+
         return x, steps
 
 
-# # Example usage
-# A = [[1, 0, 0, 10],
-#      [1, 1, 0, 16],
-#      [0, 0, 1, 3]
-#      ]
+# Example usage
+A = [[2, 1, 6, 9],
+     [8, 3, 2, 13],
+     [1, 5, 1, 7]]
 
-# solver = JacobiSolver(A, [1, 1, 1], 20, 0.01, 7)
-# ans, steps = solver.jacobi()
+solver = JacobiSolver(A, [0, 0, 0], 100, 0.00001, 5)
+ans, steps = solver.jacobi()
 
-# print(ans)
-# for step in steps:
-#     print(step)
+print(ans)
+for step in steps:
+    print(step)

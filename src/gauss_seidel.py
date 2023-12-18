@@ -63,15 +63,12 @@ def jacobi(matrix, initial_cond, iterations, tol, precision=5):
     return values, steps
 
 
-matrix = [[2, 3, -1, 4, -1, 5, 6, 10],
-          [1, 2, 3, -1, 4, 1, -5, 5],
-          [3, 1, -2, 3, -4, 2, -1, 3],
-          [4, 3, 1, 2, 0, 3, -6, 9],
-          [1, -2, 3, 1, 2, -3, 4, -2],
-          [2, -1, 4, 2, -1, 3, -2, 6],
-          [3, 2, 2, -3, 4, -5, 6, -1]]
+matrix = [[10,0,1,4],
+          [1,7,3,-1],
+          [3,1,9,3]
+          ]
 
-ans, steps = jacobi(matrix, [0, 0, 0, 0, 0, 0, 0], 100, 0.0005, 5)
+ans, steps = jacobi(matrix, [0, 0, 0], 100, 0.0005, 5)
 print(ans)
 for steps in steps:
     print(steps)

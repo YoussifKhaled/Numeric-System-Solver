@@ -77,7 +77,7 @@ class MatrixInputApp(QWidget):
         # LU Decomposition options
         self.lu_options_label = QLabel('LU Decomposition Options:')
         self.lu_options_combobox = QComboBox()
-        self.lu_options_combobox.addItems(['Doolittle Form', 'Crout Form', 'Cholesky Form'])
+        self.lu_options_combobox.addItems(['Doolitle', 'Crout', 'Cholesky'])
         self.lu_options_label.setVisible(False)
         self.lu_options_combobox.setVisible(False)
 
@@ -91,6 +91,8 @@ class MatrixInputApp(QWidget):
         self.max_iterations_spinbox.setMinimum(1)
         self.max_iterations_spinbox.setMaximum(1000)
         self.max_iterations_spinbox.setMaximumWidth(50)
+        default_value = 100
+        self.max_iterations_spinbox.setValue(default_value)
         self.max_iterations_label.setVisible(False)
         self.max_iterations_spinbox.setVisible(False)
 
@@ -100,7 +102,7 @@ class MatrixInputApp(QWidget):
 
 
         # Absolute Relative Error for Gauss-Seidel or Jacobi
-        self.abs_relative_error_label = QLabel('Absolute Relative Error: 10e-')
+        self.abs_relative_error_label = QLabel('Absolute Relative Error: 1e-')
         self.abs_relative_error_spinbox = QSpinBox()
         self.abs_relative_error_spinbox.setMinimum(0)  # corresponds to 10e-15
         self.abs_relative_error_spinbox.setMaximum(15)
@@ -121,6 +123,8 @@ class MatrixInputApp(QWidget):
         self.significant_digits_spinbox.setMinimum(1)
         self.significant_digits_spinbox.setMaximum(15)
         self.significant_digits_spinbox.setMaximumWidth(50)
+        default_value = 7
+        self.significant_digits_spinbox.setValue(default_value)
 
         significant_digits_layout = QHBoxLayout()
         significant_digits_layout.addWidget(self.significant_digits_label)
@@ -137,6 +141,7 @@ class MatrixInputApp(QWidget):
         self.equation_count_label = QLabel('Enter the number of equations (and variables):')
         self.equation_count_input = QLineEdit()
         self.submit_button = QPushButton('Submit')
+        self.equation_count_input.setText('3')
 
         dimensions_submit_layout = QHBoxLayout()
         dimensions_submit_layout.addWidget(self.equation_count_label)
@@ -340,6 +345,7 @@ class MatrixInputApp(QWidget):
         self.current_significant_digits = self.significant_digits_spinbox.value()
         self.current_mode = self.mode
 
+
         for input_field in self.coefficient_inputs:
             input_field.setText('0')  # Set the value to zero
 
@@ -360,6 +366,7 @@ class MatrixInputApp(QWidget):
         
         self.steps_label.setText("Hi")
         self.answers_label.setText("Hi")
+        self.equation_count_input.setText(f"{self.equation_count}")
 
 
     def solve_clicked(self):
@@ -414,6 +421,7 @@ class MatrixInputApp(QWidget):
         print("iterations", self.max_iterations_spinbox.value())
         print("tol", self.get_actual_abs_relative_error())
         print("precision", self.significant_digits_spinbox.value())
+        print("LU Method", self.lu_options_combobox.currentText())
 
 
         engine = LinearSolverEngine(
@@ -422,7 +430,8 @@ class MatrixInputApp(QWidget):
             initial_guess=initial_guess_values,
             iterations=self.current_max_iterations,
             tol=self.get_actual_abs_relative_error(),
-            precision=self.current_significant_digits
+            precision=self.current_significant_digits,
+            LU_Method=self.current_lu_option
         )
 
         # Solve the linear system and get results
