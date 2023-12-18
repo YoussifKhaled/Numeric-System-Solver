@@ -66,6 +66,8 @@ class LinearSolverEngine:
 
 
     def format_answer(self, ans):
+        if ans == -1 or ans=="-1":
+            return "This system of equations will not converge"
         return f"Solution: {ans}"
     
     def separate_augmented_matrix(self,augmented_matrix):
