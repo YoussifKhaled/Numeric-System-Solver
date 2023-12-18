@@ -65,6 +65,8 @@ def gauss_jordan_elimination(matrix, precision = 5):
                 factor = matrix[i][row]
                 for j in range(row, dim+1):
                     matrix[i][j] -= factor * matrix[row][j]
+                    if abs(matrix[i][j]) < Decimal('10') ** -precision:
+                            matrix[i][j] = Decimal('0')
                 #Checking for consistency
                 val_max_check = max(abs(x) for x in matrix[i][:dim])
                 if val_max_check == Decimal('0'):
