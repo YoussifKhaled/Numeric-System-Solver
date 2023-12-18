@@ -81,6 +81,8 @@ class GaussElimination:
                 factor = (a[i][k]) / (a[k][k])
                 for j in range(0, n):
                     a[i][j] = (a[i][j]) - ((factor) * (a[k][j]))
+                    if abs(a[i][j]) < Decimal('10')** -self.precision:
+                        a[i][j]=Decimal('0')
                 b[i] = (b[i]) - (factor) * (b[k])
                 self.steps.append([self.get_matrix(a, b),
                                    f"Add(R{i + 1} + {-float(factor)} * R{k + 1})"])
