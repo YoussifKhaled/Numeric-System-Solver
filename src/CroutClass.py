@@ -2,7 +2,7 @@ import numpy as np
 from numpy import linalg as LA
 
 class CroutDecomposition:
-    def __init__(self, a, b, sig_figs=20):
+    def __init__(self, a, b, sig_figs=5):
         self.a = a
         self.b = b
         self.sig_figs = sig_figs
@@ -104,7 +104,8 @@ class CroutDecomposition:
             self.steps.append(
                 f"Backward substitution, calculate x element ({i + 1}, {i + 1}): ({y[i]} - {sum}) / {u[i][i]} = {x[i]}.\nx = {x}"
             )
-
+        for i in range(n):
+            x[i] = self.ROUND_SIG(x[i])
         return x
 
     def calculateError(self, l, u):

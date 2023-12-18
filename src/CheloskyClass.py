@@ -2,7 +2,7 @@ import numpy as np
 from numpy import linalg as LA
 
 class CholeskySolver:
-    def __init__(self, a, b, sig_figs=20):
+    def __init__(self, a, b, sig_figs=5):
         self.a = a
         self.b = b
         self.sig_figs = sig_figs
@@ -51,19 +51,51 @@ class CholeskySolver:
         n = len(b)
         x = np.zeros(n)
         y = np.zeros(n)
-        for i in range(n):
-            sum_val = b[i]
+
+        self.steps.append(
+            f"Initialize forward substitution vectors x and y.\nx = {x}\ny = {y}"
+        )
+
+        for i in range(0, n):
+            sum = self.b[i]
             for j in range(i):
-                sum_val = self.ROUND_SIG(sum_val - self.ROUND_SIG(l[i][j] * y[j]))
-            y[i] = self.ROUND_SIG(sum_val / l[i][i])
+                sum = self.ROUND_SIG(
+                    sum - self.ROUND_SIG(l[i][j] * y[j])
+                )
+                self.steps.append(
+                    f"Forward substitution for row {i + 1}, update sum: {self.b[i]} - {l[i][j]} * {y[j]} = {sum}"
+                )
+            y[i] = self.ROUND_SIG(sum / l[i][i])
+            self.steps.append(
+                f"Calculate y element ({i + 1}): {sum} / {l[i][i]} = {y[i]}.\ny = {y}"
+            )
+
+        self.steps.append(
+            f"Completed forward substitution, calculated y vector: {y}"
+        )
 
         x[n - 1] = self.ROUND_SIG(y[n - 1] / u[n - 1][n - 1])
-        for i in range(n - 2, -1, -1):
-            sum_val = 0
-            for j in range(i + 1, n):
-                sum_val = self.ROUND_SIG(sum_val + self.ROUND_SIG(u[i][j] * x[j]))
-            x[i] = self.ROUND_SIG(self.ROUND_SIG((y[i] - sum_val)) / u[i][i])
+        self.steps.append(
+            f"Backward substitution, start with x element ({n}, {n}): {y[n - 1]} / {u[n - 1][n - 1]} = {x[n - 1]}.\nx = {x}"
+        )
 
+        for i in range(n - 2, -1, -1):
+            sum = 0
+            for j in range(i + 1, n):
+                sum = self.ROUND_SIG(
+                    sum + self.ROUND_SIG(u[i][j] * x[j])
+                )
+                self.steps.append(
+                    f"Backward substitution, update sum for row {i + 1}: {sum} + {u[i][j]} * {x[j]}"
+                )
+            x[i] = self.ROUND_SIG(
+                self.ROUND_SIG((y[i] - sum)) / u[i][i]
+            )
+            self.steps.append(
+                f"Backward substitution, calculate x element ({i + 1}, {i + 1}): ({y[i]} - {sum}) / {u[i][i]} = {x[i]}.\nx = {x}"
+            )
+        for i in range(n):
+            x[i] = self.ROUND_SIG(x[i])
         return x
 
     def isSymmetric(self):
