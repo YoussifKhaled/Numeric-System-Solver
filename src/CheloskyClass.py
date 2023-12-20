@@ -39,6 +39,8 @@ class CholeskySolver:
                     self.steps.append(f"l[{i}][{k}] = sqrt(a[{i}][{i}] - {tmp_sum})")
                     self.steps.append(f"u[{k}][{i}] = l[{i}][{k}]")
                 else:
+                    if l[k][k]==0:
+                        raise ValueError("Zero pivot encountered, cannot continue.")
                     l[i][k] = self.ROUND_SIG(self.ROUND_SIG(self.a[i][k] - tmp_sum) / self.ROUND_SIG(l[k][k]))
                     u[k][i] = l[i][k]
                     self.steps.append(f"Step {i + 1}:")

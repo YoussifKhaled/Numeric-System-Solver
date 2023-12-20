@@ -46,6 +46,8 @@ class CroutDecomposition:
             for j in range(1 + k, n):
                 # Calculate L element
                 tmp_sum = self.ROUND_SIG(np.dot(l[k, :k], u[:k, j]))
+                if l[k][k]==0:
+                    raise ValueError("Zero pivot encountered, cannot continue.")
                 u[k][j] = self.ROUND_SIG(
                     self.ROUND_SIG((self.a[k][j] - tmp_sum)) / l[k][k],
       
