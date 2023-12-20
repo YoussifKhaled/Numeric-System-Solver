@@ -37,35 +37,40 @@ class Doolitle:
         self.steps.append(
             f"Initialize L and U matrices:\nL = {l}\nU = {u}"
         )
-
-        for i in range(n - 1):
-            l[i][i] = 1
-            for j in range(i + 1, n):
-                factor = self.ROUND_SIG(u[j][i] / u[i][i], self.sig_figs)
-                self.steps.append(
-                    f"Calculate factor for row {j + 1}, column {i + 1}: {u[j][i]} / {u[i][i]} = {factor}"
-                )
-                l[j][i] = factor
-                u[j][i] = 0
-
-                self.steps.append(
-                    f"Set L element ({j + 1}, {i + 1}) to {factor} and U element ({j + 1}, {i + 1}) to 0.\nL = {l}\nU = {u}"
-                )
-
-                for k in range(i + 1, n):
-                    new_u_element = self.ROUND_SIG(
-                        u[j][k] - self.ROUND_SIG(factor * u[i][k], self.sig_figs), self.sig_figs
-                    )
+        try:
+            for i in range(n - 1):
+                l[i][i] = 1
+                for j in range(i + 1, n):
+                    if u[i][i] == 0:
+                        raise ValueError("Zero pivot encountered, cannot continue.")
+                    factor = self.ROUND_SIG(u[j][i] / u[i][i], self.sig_figs)
                     self.steps.append(
-                        f"Update U element ({j + 1}, {k + 1}): {u[j][k]} - {factor} * {u[i][k]} = {new_u_element}.\nU = {u}"
+                        f"Calculate factor for row {j + 1}, column {i + 1}: {u[j][i]} / {u[i][i]} = {factor}"
                     )
-                    u[j][k] = new_u_element
+                    l[j][i] = factor
+                    u[j][i] = 0
 
-        l[n - 1][n - 1] = 1
+                    self.steps.append(
+                        f"Set L element ({j + 1}, {i + 1}) to {factor} and U element ({j + 1}, {i + 1}) to 0.\nL = {l}\nU = {u}"
+                    )
 
-        self.steps.append(f"Final: Set L element ({n}, {n}) to 1.\nL = {l}")
+                    for k in range(i + 1, n):
+                        new_u_element = self.ROUND_SIG(
+                            u[j][k] - self.ROUND_SIG(factor * u[i][k], self.sig_figs), self.sig_figs
+                        )
+                        self.steps.append(
+                            f"Update U element ({j + 1}, {k + 1}): {u[j][k]} - {factor} * {u[i][k]} = {new_u_element}.\nU = {u}"
+                        )
+                        u[j][k] = new_u_element
 
-        return l, u
+            l[n - 1][n - 1] = 1
+
+            self.steps.append(f"Final: Set L element ({n}, {n}) to 1.\nL = {l}")
+
+            return l, u
+        except ValueError as e:
+            raise ValueError("Error in the middle of calculations:", e)
+            return None, None
 
     def substitute(self):
         n = len(self.b)
