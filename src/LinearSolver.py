@@ -65,8 +65,9 @@ class LinearSolverEngine:
         return formatted_steps
 
 
-    def format_answer(self, ans):
-        if ans == -1 or ans=="-1":
+    def format_answer(self, ans, flag=True):
+        
+        if  flag and (ans == -1 or ans=="-1"):
             return "This system of equations will not converge"
         return f"Solution: {ans}"
     

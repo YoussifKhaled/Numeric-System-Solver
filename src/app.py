@@ -435,12 +435,13 @@ class MatrixInputApp(QWidget):
         )
 
         # Solve the linear system and get results
+        flag = True
         try:
             start_time = time.time() 
             ans, steps = engine.solve()
             end_time = time.time()  # Measure the end time
             runtime = end_time - start_time
-
+            flag = False
             # Update the Last Runtime label
             self.last_runtime_label.setText(f'Last Runtime: {runtime:.4f} seconds')
 
@@ -454,7 +455,7 @@ class MatrixInputApp(QWidget):
         print(engine.format_steps(steps))
 
         self.steps_label.setText(engine.format_steps(steps))
-        self.answers_label.setText(engine.format_answer(ans))
+        self.answers_label.setText(engine.format_answer(ans, flag))
 
 
 
