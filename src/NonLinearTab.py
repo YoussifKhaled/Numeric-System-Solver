@@ -9,7 +9,8 @@ import re
 from sympy import Symbol, sympify, diff, plot
 from PyQt5.QtWidgets import QMessageBox
 from Newton import chef
-
+from secant import secant
+from fixedpoint import fixed_point
 class NonLinearTab(QWidget):
     def __init__(self):
         super().__init__()
@@ -296,7 +297,18 @@ class NonLinearTab(QWidget):
             elif self.current_method == 'False-Position':
                 pass
             elif self.current_method == 'Fixed Point':
-                pass
+                try:
+                    answer, steps = fixed_point(self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                         self.current_significant_digits,
+                                        self.get_actual_abs_relative_error(), self.current_max_iterations
+                                       )
+                    answer_text = str(answer)
+                    if answer == -1:
+                        raise ValueError('This system of equations will not converge')
+                    steps_text = '\n'.join(steps)
+                except Exception as e:
+                    raise ValueError(f'Fixed Point Method Error: {str(e)}')
+
             elif self.current_method == 'Original Newton-Raphson':
                 try:
                     answer, steps = chef('Newton', self.equation_textbox.toPlainText(), self.current_initial_guess,
@@ -328,7 +340,15 @@ class NonLinearTab(QWidget):
                     raise ValueError(f'Modified Newton2 Method Error: {str(e)}')
 
             elif self.current_method == 'Secant':
-                pass
+                try:
+                    answer, steps = secant(self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                        self.current_second_guess,self.current_significant_digits ,self.get_actual_abs_relative_error(), self.current_max_iterations)
+                    answer_text = str(answer)
+                    if answer == -1:
+                        raise ValueError('This system of equations will not converge')
+                    steps_text = '\n'.join(steps)
+                except Exception as e:
+                    raise ValueError(f'Secant Method Error: {str(e)}')
 
             self.steps_label.setText(steps_text)
             self.answers_label.setText(answer_text)
