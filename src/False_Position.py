@@ -36,10 +36,10 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
             return c
         # if prev_c == c:
         #     raise TimeoutError()
-        if(c==0):
-            raise ValueError("Division by zero encountered!")
-        
-        error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
+        if(c!=0):
+            error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
+        else:
+            error=round_fig(abs(((c-prev_c))*100),sig_fig)
         steps.append(f"Step {i+1}: Interval updated: [{a}, {b}] Xr is {c} and Error is {error}")
 
         if fa * fc < 0:

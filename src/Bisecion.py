@@ -24,7 +24,7 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
     fa = round_fig(func(a), sig_fig)
     # print(f"function of a is {fa} function of b is {fb} ")
     # print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} after ")
-    if round_fig(fa * fb,sig_fig) >= 0:
+    if fa * fb >= 0:
         raise ValueError("The function values at the interval endpoints must have opposite signs.")
     prev_c = 1000000
     # i=0
@@ -51,12 +51,12 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
         
         # if prev_c == c:
             # raise TimeoutError()
-        
-        if(c==0):
-            raise ValueError("Division by zero encountered!")
-        
+        if(c!=0):
+            error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
+        else:
+            error=round_fig(abs(((c-prev_c))*100),sig_fig)
         steps.append(f"Step {i+1}: Interval updated: [{a}, {b}] Xr is {c} and Error is {error}")
-        error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
+        
 
         if fa * fc < 0:
             b = c
