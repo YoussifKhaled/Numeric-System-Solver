@@ -84,7 +84,7 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
 # print("Root:", root)
 
 def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
-    
+    func_str = func_str.replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
     def f(x):
         return eval(func_str)
     
@@ -98,8 +98,10 @@ def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
 
     except TimeoutError as e:
         print("The method did not converge")
+        raise e("The method did not converge")
     except ValueError as e:
         print("Error:", str(e))
+        raise e("Error:", str(e))
 
 # func_str = input("Enter the function: ").replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
 # a = float(input("Enter the first number: "))

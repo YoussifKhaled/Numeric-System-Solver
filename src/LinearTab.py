@@ -490,8 +490,3 @@ class LinearTab(QWidget):
         print(matrix_data)
         return matrix_data
 
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    matrix_input_app = LinearTab()
-    sys.exit(app.exec_())

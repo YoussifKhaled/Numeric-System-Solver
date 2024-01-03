@@ -277,6 +277,8 @@ class NonLinearTab(QWidget):
         return 10 ** -self.current_abs_relative_error
 
     def solve_clicked(self):
+        self.steps_label.setText('HI')
+        self.answers_label.setText('HI')
         print('Solve clicked')
 
         try:
@@ -303,6 +305,7 @@ class NonLinearTab(QWidget):
             answer_text = ''
             steps_text = ''
             start_time = time.time()
+            steps,answer = None,None
             if self.current_method == 'Bisection':
                 try:
                     steps,answer = bisection(self.equation_textbox.toPlainText(), self.current_initial_guess,
@@ -310,14 +313,17 @@ class NonLinearTab(QWidget):
                                          self.current_significant_digits,self.current_max_iterations)
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
-                except Exception as e:
-                    raise ValueError(f'Bisection Method Error: {str(e)}')
+                except ValueError as e:
+                    answer_text = str(e)
+                    steps_text = str(e)
             elif self.current_method == 'False-Position':
                 try:
                     steps,answer = false_position(self.equation_textbox.toPlainText(), self.current_initial_guess,
                                         self.current_second_guess,  self.get_actual_abs_relative_error(),
                                         self.current_significant_digits
                                        )
+                    print(steps)
+                    print(answer)
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
                 except Exception as e:
@@ -375,6 +381,7 @@ class NonLinearTab(QWidget):
                     steps_text = '\n'.join(steps)
                 except Exception as e:
                     raise ValueError(f'Secant Method Error: {str(e)}')
+                    
             end_time = time.time()
             runtime = end_time - start_time
 
@@ -387,8 +394,6 @@ class NonLinearTab(QWidget):
 
         except ValueError as ve:
             self.showErrorMessage(f'Value Error: {str(ve)}')
-        except Exception as ex:
-            self.showErrorMessage(f'An unexpected error occurred: {str(ex)}')
 
     def stringify_steps(self,steps):
         return '\n'.join(steps)
