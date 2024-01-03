@@ -116,6 +116,19 @@ class NonLinearTab(QWidget):
         significant_digits_layout = QHBoxLayout()
         significant_digits_layout.addWidget(self.significant_digits_label)
         significant_digits_layout.addWidget(self.significant_digits_spinbox)
+        # Multiplicity input
+        self.multiplicity_label = QLabel('Multiplicity:')
+        self.multiplicity_spinbox = QSpinBox()
+        self.multiplicity_spinbox.setMinimum(1)
+        self.multiplicity_spinbox.setMaximum(10)
+        self.multiplicity_spinbox.setMaximumWidth(50)
+        default_multiplicity = 1
+        self.multiplicity_spinbox.setValue(default_multiplicity)
+
+        multiplicity_layout = QHBoxLayout()
+        multiplicity_layout.addWidget(self.multiplicity_label)
+        multiplicity_layout.addWidget(self.multiplicity_spinbox)
+
 
         input_settings_layout = QVBoxLayout()
         input_settings_layout.addLayout(input_mode_layout)
@@ -123,6 +136,7 @@ class NonLinearTab(QWidget):
         input_settings_layout.addLayout(second_guess_layout)  # Add second guess layout
         input_settings_layout.addLayout(abs_relative_error_layout)
         input_settings_layout.addLayout(significant_digits_layout)
+        input_settings_layout.addLayout(multiplicity_layout)
 
         input_settings_groupbox.setLayout(input_settings_layout)
 
@@ -199,7 +213,8 @@ class NonLinearTab(QWidget):
         self.setLayout(main_layout)
 
         self.method_combobox.currentIndexChanged.connect(self.toggle_method_options)
-
+        self.multiplicity_label.hide()
+        self.multiplicity_spinbox.hide()
         self.show()
 
     def toggle_method_options(self):
@@ -207,10 +222,23 @@ class NonLinearTab(QWidget):
             # Show the second guess input for specific methods
             self.second_guess_label.show()
             self.second_guess_edit.show()
+            
+            # Hide the multiplicity field if visible
+            self.multiplicity_label.hide()
+            self.multiplicity_spinbox.hide()
+        elif self.method_combobox.currentText() == 'Modified Newton-Raphson':
+            # Show the second guess and multiplicity inputs for Modified Newton-Raphson
+            self.second_guess_label.show()
+            self.second_guess_edit.show()
+            self.multiplicity_label.show()
+            self.multiplicity_spinbox.show()
         else:
-            # Hide the second guess input for other methods
+            # Hide the second guess and multiplicity inputs for other methods
             self.second_guess_label.hide()
             self.second_guess_edit.hide()
+            self.multiplicity_label.hide()
+            self.multiplicity_spinbox.hide()
+
 
     def get_actual_abs_relative_error(self):
         # Calculate the actual value from the spin box value
@@ -221,6 +249,9 @@ class NonLinearTab(QWidget):
         self.current_max_iterations = self.max_iterations_spinbox.value()
         self.current_abs_relative_error = self.abs_relative_error_spinbox.value()
         self.current_significant_digits = self.significant_digits_spinbox.value()
+        # Get multiplicity value
+        self.current_multiplicity = self.multiplicity_spinbox.value()
+
         self.current_initial_guess = float(self.initial_guess_edit.text())  # Get the initial guess value
         # Check if the second guess input is visible
         if self.second_guess_label.isVisible():
