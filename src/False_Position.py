@@ -68,18 +68,14 @@ def main(func_str, a, b, tolerance,sig_fig):
     def f(x):
         return eval(func_str)
     
-    try:
-        root = false_position(f, a, b,tolerance,sig_fig)
-        print("Steps:")
-        for step in steps:
-            print(step)
-        print("Root:", root)
-        return steps,root
+    
+    root = false_position(f, a, b,tolerance,sig_fig)
+    print("Steps:")
+    for step in steps:
+        print(step)
+    print("Root:", root)
+    return steps,root
 
-    except TimeoutError as e:
-        print("The method did not converge")
-    except ValueError as e:
-        print("Error:", str(e))
 
 # func_str = input("Enter the function: ")
 # a = float(input("Enter the first number: "))

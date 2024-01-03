@@ -88,20 +88,12 @@ def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
     def f(x):
         return eval(func_str)
     
-    try:
-        root = bisection_method(f, a, b,tolerance,sig_fig,max_iter)
-        print("Steps:")
-        for step in steps:
-            print(step)
-        print("Root:", root)
-        return steps,root
-
-    except TimeoutError as e:
-        print("The method did not converge")
-        raise e("The method did not converge")
-    except ValueError as e:
-        print("Error:", str(e))
-        raise e("Error:", str(e))
+    root = bisection_method(f, a, b,tolerance,sig_fig,max_iter)
+    print("Steps:")
+    for step in steps:
+        print(step)
+    print("Root:", root)
+    return steps,root
 
 # func_str = input("Enter the function: ").replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
 # a = float(input("Enter the first number: "))

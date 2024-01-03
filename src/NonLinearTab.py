@@ -313,8 +313,10 @@ class NonLinearTab(QWidget):
                                          self.current_significant_digits,self.current_max_iterations)
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
             elif self.current_method == 'False-Position':
                 try:
                     steps,answer = false_position(self.equation_textbox.toPlainText(), self.current_initial_guess,
@@ -325,8 +327,10 @@ class NonLinearTab(QWidget):
                     print(answer)
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'False-Position Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
             elif self.current_method == 'Fixed Point':
                 try:
                     answer, steps = fixed_point(self.equation_textbox.toPlainText(), self.current_initial_guess,
@@ -337,8 +341,10 @@ class NonLinearTab(QWidget):
                     if answer == -1:
                         raise ValueError('This system of equations will not converge')
                     steps_text = '\n'.join(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'Fixed Point Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
             elif self.current_method == 'Original Newton-Raphson':
                 try:
@@ -347,8 +353,10 @@ class NonLinearTab(QWidget):
                                         self.current_significant_digits)
                     answer_text = str(answer)
                     steps_text = '\n'.join(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'Newton Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
             elif self.current_method == 'Modified Newton-Raphson1':
                 try:
@@ -357,8 +365,10 @@ class NonLinearTab(QWidget):
                                         self.current_significant_digits, self.current_multiplicity)
                     answer_text = str(answer)
                     steps_text = '\n'.join(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'Modified Newton1 Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
             elif self.current_method == 'Modified Newton-Raphson2':
                 try:
@@ -367,8 +377,10 @@ class NonLinearTab(QWidget):
                                         self.current_significant_digits)
                     answer_text = str(answer)
                     steps_text = '\n'.join(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'Modified Newton2 Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
             elif self.current_method == 'Secant':
                 try:
@@ -378,8 +390,10 @@ class NonLinearTab(QWidget):
                     if answer == -1:
                         raise ValueError('This system of equations will not converge')
                     steps_text = '\n'.join(steps)
+                except ValueError as e:
+                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
                 except Exception as e:
-                    raise ValueError(f'Secant Method Error: {str(e)}')
+                    self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
                     
             end_time = time.time()
             runtime = end_time - start_time
