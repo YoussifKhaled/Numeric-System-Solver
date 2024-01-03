@@ -313,7 +313,7 @@ class NonLinearTab(QWidget):
                                          self.current_significant_digits,self.current_max_iterations)
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
-                except ValueError as e:
+                except Exception as e:
                     raise ValueError(f'Bisection Method Error: {str(e)}')
             elif self.current_method == 'False-Position':
                 try:
