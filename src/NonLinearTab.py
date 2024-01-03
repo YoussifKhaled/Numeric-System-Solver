@@ -338,8 +338,6 @@ class NonLinearTab(QWidget):
                                         self.get_actual_abs_relative_error(), self.current_max_iterations
                                        )
                     answer_text = str(answer)
-                    if answer == -1:
-                        raise ValueError('This system of equations will not converge')
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
                     self.showErrorMessage(f'Fixed Point Method Error: {str(e)}')
@@ -387,8 +385,6 @@ class NonLinearTab(QWidget):
                     answer, steps = secant(self.equation_textbox.toPlainText(), self.current_initial_guess,
                                         self.current_second_guess,self.current_significant_digits ,self.get_actual_abs_relative_error(), self.current_max_iterations)
                     answer_text = str(answer)
-                    if answer == -1:
-                        raise ValueError('This system of equations will not converge')
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
                     self.showErrorMessage(f'Secant Method Error: {str(e)}')
