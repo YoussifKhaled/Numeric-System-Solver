@@ -81,11 +81,11 @@ def main(func_str, a, b, tolerance,sig_fig):
     except ValueError as e:
         print("Error:", str(e))
 
-func_str = input("Enter the function: ")
-a = float(input("Enter the first number: "))
-b = float(input("Enter the second number: "))
-tolerance = float(input("Enter the tolerance: "))
-sig_fig = int(input("Enter the number of significant figures: "))
-print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} func_str is {func_str}")
+# func_str = input("Enter the function: ")
+# a = float(input("Enter the first number: "))
+# b = float(input("Enter the second number: "))
+# tolerance = float(input("Enter the tolerance: "))
+# sig_fig = int(input("Enter the number of significant figures: "))
+# print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} func_str is {func_str}")
     
-main(func_str, a, b, tolerance,sig_fig)
+# main(func_str, a, b, tolerance,sig_fig)

@@ -6,11 +6,14 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import re
+import time
 from sympy import Symbol, sympify, diff, plot
 from PyQt5.QtWidgets import QMessageBox
 from Newton import chef
 from secant import secant
 from fixedpoint import fixed_point
+from Bisecion import main as bisection
+from False_Position import main as false_position
 class NonLinearTab(QWidget):
     def __init__(self):
         super().__init__()
@@ -239,6 +242,7 @@ class NonLinearTab(QWidget):
         self.show()
 
     def toggle_method_options(self):
+        
         if self.method_combobox.currentText() in ('Bisection', 'False-Position', 'Secant'):
             # Show the second guess input for specific methods
             self.second_guess_label.show()
@@ -259,6 +263,13 @@ class NonLinearTab(QWidget):
             self.second_guess_edit.hide()
             self.multiplicity_label.hide()
             self.multiplicity_spinbox.hide()
+        
+        if self.method_combobox.currentText() == 'False-Position':
+            self.max_iterations_label.hide()
+            self.max_iterations_spinbox.hide()
+        else:
+            self.max_iterations_label.show()
+            self.max_iterations_spinbox.show()
 
 
     def get_actual_abs_relative_error(self):
@@ -291,11 +302,26 @@ class NonLinearTab(QWidget):
 
             answer_text = ''
             steps_text = ''
-
+            start_time = time.time()
             if self.current_method == 'Bisection':
-                pass
+                try:
+                    steps,answer = bisection(self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                        self.current_second_guess, self.get_actual_abs_relative_error(),
+                                         self.current_significant_digits,self.current_max_iterations)
+                    answer_text = str(answer)
+                    steps_text = self.stringify_steps(steps)
+                except Exception as e:
+                    raise ValueError(f'Bisection Method Error: {str(e)}')
             elif self.current_method == 'False-Position':
-                pass
+                try:
+                    steps,answer = false_position(self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                        self.current_second_guess,  self.get_actual_abs_relative_error(),
+                                        self.current_significant_digits
+                                       )
+                    answer_text = str(answer)
+                    steps_text = self.stringify_steps(steps)
+                except Exception as e:
+                    raise ValueError(f'False-Position Method Error: {str(e)}')
             elif self.current_method == 'Fixed Point':
                 try:
                     answer, steps = fixed_point(self.equation_textbox.toPlainText(), self.current_initial_guess,
@@ -349,6 +375,11 @@ class NonLinearTab(QWidget):
                     steps_text = '\n'.join(steps)
                 except Exception as e:
                     raise ValueError(f'Secant Method Error: {str(e)}')
+            end_time = time.time()
+            runtime = end_time - start_time
+
+            # Update the runtime label
+            self.last_runtime_label.setText(f'Last Runtime: {runtime:.4f} seconds')
 
             self.steps_label.setText(steps_text)
             self.answers_label.setText(answer_text)
@@ -359,7 +390,7 @@ class NonLinearTab(QWidget):
         except Exception as ex:
             self.showErrorMessage(f'An unexpected error occurred: {str(ex)}')
 
-    def stringify_steps(steps):
+    def stringify_steps(self,steps):
         return '\n'.join(steps)
 
     def show_plot(self):
