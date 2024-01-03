@@ -63,7 +63,7 @@ class NonLinearTab(QWidget):
 
         # Options for the selection box
         self.method_options = ['Bisection', 'False-Position', 'Fixed Point', 'Original Newton-Raphson',
-                               'Modified Newton-Raphson', 'Secant']
+                               'Modified Newton-Raphson1','Modified Newton-Raphson2', 'Secant']
         self.method_label = QLabel('Select method:')
         self.method_combobox = QComboBox()
         self.method_combobox.addItems(self.method_options)
@@ -133,7 +133,6 @@ class NonLinearTab(QWidget):
         input_settings_layout = QVBoxLayout()
         input_settings_layout.addLayout(input_mode_layout)
         input_settings_layout.addLayout(max_iterations_layout)
-        input_settings_layout.addLayout(second_guess_layout)  # Add second guess layout
         input_settings_layout.addLayout(abs_relative_error_layout)
         input_settings_layout.addLayout(significant_digits_layout)
         input_settings_layout.addLayout(multiplicity_layout)
@@ -194,6 +193,8 @@ class NonLinearTab(QWidget):
         initial_guess_layout.addWidget(self.initial_guess_edit)
 
         input_settings_layout.addLayout(initial_guess_layout)
+        input_settings_layout.addLayout(second_guess_layout)  # Add second guess layout
+
         # Main layout
         main_layout = QVBoxLayout()
         main_layout.addWidget(input_settings_groupbox)
@@ -226,10 +227,10 @@ class NonLinearTab(QWidget):
             # Hide the multiplicity field if visible
             self.multiplicity_label.hide()
             self.multiplicity_spinbox.hide()
-        elif self.method_combobox.currentText() == 'Modified Newton-Raphson':
+        elif self.method_combobox.currentText() == 'Modified Newton-Raphson1':
             # Show the second guess and multiplicity inputs for Modified Newton-Raphson
-            self.second_guess_label.show()
-            self.second_guess_edit.show()
+            self.second_guess_label.hide()
+            self.second_guess_edit.hide()
             self.multiplicity_label.show()
             self.multiplicity_spinbox.show()
         else:
