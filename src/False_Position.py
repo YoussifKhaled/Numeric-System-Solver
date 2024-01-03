@@ -14,9 +14,8 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
         raise ValueError("The function values at the interval endpoints must have opposite signs.")
     error=100
     prev_c = 1000000
-    steps.append(f"Step 0: Interval updated: [{a}, {b}] Xr is {round_fig((a + b) / 2,sig_fig)} and Error is {error}")
-    # i=0
-    # while(True):
+    steps.append(f"Step 0: Interval is: [{a}, {b}] and initial Xr is {round_fig((a + b) / 2,sig_fig)}")
+
     for i in range(max_iter):
         if((fb - fa)==0):
             raise ValueError("Division by zero encountered!")
@@ -25,17 +24,16 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
         fb = round_fig(f(b),sig_fig)
         fc = round_fig(f(c),sig_fig)
 
-        # if abs(fc) < tol:
         if fc == 0:
             steps.append(f"Step {i+1}: Approximate root found: {c}")
             return c
         
         if error < tol:
-            # raise TimeoutError()
             steps.append(f"Step {i+1}: Approximate root found: {c}")
             return c
-        # if prev_c == c:
-        #     raise TimeoutError()
+
+        if(prev_c==1000000):
+            error=100
         if(c!=0):
             error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
         else:
@@ -44,10 +42,8 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
 
         if fa * fc < 0:
             b = c
-            # fb = fc
         elif fa * fc > 0:
             a = c
-            # fa = fc
         else:
             if fa == 0:
                 steps.append(f"Step {i+1}: Approximate root found: {a}")
