@@ -1,23 +1,19 @@
-
 from sympy import Symbol, sympify
 from sympy import Symbol, diff
-from sympy import Symbol, lambdify
-from sympy.plotting import plot
-
-from sympy import symbols
+from sympy import re as real
 from decimal import Decimal, getcontext
 import re
-
+import math
 
 def newton(x,fx,f1x,tol,iter,x0):
 
     Steps = []
-
     for i in range(1,iter+1):
-        fxi = Decimal(str(fx.subs(x,x0).evalf(n=getcontext().prec)))
-        f1xi = Decimal(str(f1x.subs(x,x0).evalf(n=getcontext().prec)))
+        fxi = Decimal(str(real(fx.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
+        f1xi = Decimal(str(real(f1x.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
         
         if(abs(f1xi) < 1e-12):
+            Steps.append('Derivative is zero,So method fails')
             break
         
         x1 = Decimal(x0) - fxi / f1xi
@@ -30,8 +26,10 @@ def newton(x,fx,f1x,tol,iter,x0):
         Steps.append('Iteration'+ str(i) +': xi='+str(x0)+' f(xi)='+str(fxi)+' f\'(xi)='+str(f1xi) + ' xi+1='+str(x1) + ' εi='+str(error)+'%')
         
         if float(error) < tol:
+            Steps.append('Relative error < tolerance, So method converges')
             break
-        
+        if(i == iter): 
+          Steps.append('Not convergent in given maximum step count.')
         x0 = float(x1)
     return x0,Steps
 
@@ -40,10 +38,11 @@ def modified_newton1(x,fx,f1x,tol,iter,x0,m):
     Steps = []
 
     for i in range(1,iter+1):
-        fxi = Decimal(str(fx.subs(x,x0).evalf(n=getcontext().prec)))
-        f1xi = Decimal(str(f1x.subs(x,x0).evalf(n=getcontext().prec)))
+        fxi = Decimal(str(real(fx.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
+        f1xi = Decimal(str(real(f1x.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
         
         if(abs(f1xi) < 1e-12):
+            Steps.append('Derivative is zero,So method fails')
             break
         
         x1 = Decimal(x0) - m * (fxi / f1xi)
@@ -56,8 +55,10 @@ def modified_newton1(x,fx,f1x,tol,iter,x0,m):
         Steps.append('Iteration'+ str(i) +': xi='+str(x0)+' f(xi)='+str(fxi)+' f\'(xi)='+str(f1xi) + ' xi+1='+str(x1) + ' εi='+str(error)+'%')
         
         if float(error) < tol:
+            Steps.append('Relative error < tolerance, So method converges')
             break
-        
+        if(i == iter): 
+          Steps.append('Not convergent in given maximum step count.')
         x0 = float(x1)
     return x0,Steps
 
@@ -66,11 +67,15 @@ def modified_newton2(x,fx,f1x,f2x,tol,iter,x0):
     Steps = []
 
     for i in range(1,iter+1):
-        fxi = Decimal(str(fx.subs(x,x0).evalf(n=getcontext().prec)))
-        f1xi = Decimal(str(f1x.subs(x,x0).evalf(n=getcontext().prec)))
-        f2xi = Decimal(str(f2x.subs(x,x0).evalf(n=getcontext().prec)))
-        
+        fxi = Decimal(str(real(fx.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
+        f1xi = Decimal(str(real(f1x.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
+        f2xi = Decimal(str(real(f2x.subs(x,x0).evalf(n=getcontext().prec)))) # type: ignore
+
+        if math.isnan(fxi) or math.isnan(f1xi) or math.isnan(f2xi):
+            Steps.append('Method Terminated')
+            break
         if(abs(f1xi**2 - (fxi * f2xi)) < 1e-12):
+            Steps.append('Divison by Zero ,So method fails')
             break
         
         x1 = Decimal(x0) - (fxi * f1xi)/(f1xi ** 2 - fxi * f2xi)
@@ -83,8 +88,10 @@ def modified_newton2(x,fx,f1x,f2x,tol,iter,x0):
         Steps.append('Iteration'+ str(i) +': xi='+str(x0)+' f(xi)='+str(fxi)+' f\'(xi)='+str(f1xi) + ' f\'\'(xi)='+str(f2xi) + ' xi+1='+str(x1) + ' εi='+str(error)+'%')
         
         if float(error) < tol:
+            Steps.append('Relative error < tolerance, So method converges')
             break
-        
+        if(i == iter): 
+          Steps.append('Not convergent in given maximum step count.')
         x0 = float(x1)
     return x0,Steps
 
@@ -100,14 +107,6 @@ def chef(Operation, Expression, x0,tol=1e-5, iter=50, precision=5, m=1):
         fx = sympify(Expression)
         f1x = diff(fx)
         f2x = diff(f1x)
-        #------plot----
-        min_x = -10   # you can take it as input 
-        max_x = 10
-        p = plot(fx, (x, min_x, max_x), show=False)
-        p.title = fx
-        p.ylabel = ''
-        p.xlabel = ''
-        p.show()
     except:
         return 'Invalid Expression',[]
     
@@ -126,24 +125,25 @@ def chef(Operation, Expression, x0,tol=1e-5, iter=50, precision=5, m=1):
 
 def main():
    
-    Expression = 'X**3-2*x^2-4*x+8'
-    m = 3
-    x0= 4
+    Expression = '(x-1)**(3)+0.512'
+    #Expression = 'e**(-x)-x'
+    m = 1
+    x0= 2.5
     print('Expression: '+Expression)
     print('Newton method:')
-    xroot,stps = chef('Newton',Expression,x0,1e-4,100,5)
+    xroot,stps = chef('Newton',Expression,x0,1e-4,50,5)
     print('Root = '+str(xroot))
     for stp in stps:
         print(stp)
     print('---------------------------------------------')
     print('Modified1 Newton method:')
-    xroot,stps = chef('Modified Newton1',Expression,x0,1e-4,100,5,m)
+    xroot,stps = chef('Modified Newton1',Expression,x0,1e-4,50,5,m)
     print('Root = '+str(xroot))
     for stp in stps:
         print(stp)
     print('---------------------------------------------')
     print('Modified2 Newton method:')
-    xroot,stps = chef('Modified Newton2',Expression,x0,1e-4,100,5)
+    xroot,stps = chef('Modified Newton2',Expression,x0,1e-4,50,5)
     print('Root = '+str(xroot))
     for stp in stps:
         print(stp)
