@@ -6,7 +6,7 @@ import qtpy
 
 from LinearSolver import LinearSolverEngine
 
-class MatrixInputApp(QWidget):
+class LinearTab(QWidget):
     def __init__(self):
         super().__init__()
 
@@ -27,26 +27,29 @@ class MatrixInputApp(QWidget):
         # Set dark theme stylesheet
         self.setStyleSheet('''
             QWidget {
-                background-color: #333;
+                background-color: #8B0000; /* Dark Red */
                 color: #eee;
             }
             QGroupBox {
-                border: 2px solid #555;
+                border: 2px solid #B22222; /* Fire Brick */
                 border-radius: 5px;
                 margin-top: 10px;
             }
             QLineEdit, QPushButton, QComboBox, QSpinBox, QDoubleSpinBox {
-                background-color: #444;
+                background-color: #800000; /* Maroon */
                 color: #eee;
-                border: 1px solid #555;
+                border: 1px solid #B22222; /* Fire Brick */
                 border-radius: 3px;
                 padding: 5px;
             }
             QRadioButton {
                 spacing: 5px;
+                color: #eee;
+            }
+            QTabBar::tab {
+                color: #000; /* Black */
             }
         ''')
-
         # Set window opacity
         self.setWindowOpacity(0.92)
         self.last_runtime_label = QLabel('Last Runtime: N/A')
@@ -490,5 +493,5 @@ class MatrixInputApp(QWidget):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    matrix_input_app = MatrixInputApp()
+    matrix_input_app = LinearTab()
     sys.exit(app.exec_())
