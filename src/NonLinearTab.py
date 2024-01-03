@@ -314,8 +314,7 @@ class NonLinearTab(QWidget):
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
                 except ValueError as e:
-                    answer_text = str(e)
-                    steps_text = str(e)
+                    raise ValueError(f'Bisection Method Error: {str(e)}')
             elif self.current_method == 'False-Position':
                 try:
                     steps,answer = false_position(self.equation_textbox.toPlainText(), self.current_initial_guess,
