@@ -1,36 +1,23 @@
 import math
-# import signal
-
-
-# def signal_handler (signal, frame):
-    
-#     raise TimeoutError()
-
-# signal.signal(signal.SIGINT, signal_handler)
-
-
-# diverged = False
 steps = []
 
 def round_fig(x, n):
     return round(x, n - len(str(int(x))))
 
 def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
-    steps.clear() # Clear the steps list
+    steps.clear() 
     steps.append(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} before ")
     a = round_fig(a, sig_fig)
     b = round_fig(b, sig_fig)
     fb = round_fig(func(b), sig_fig)
     fa = round_fig(func(a), sig_fig)
-    # print(f"function of a is {fa} function of b is {fb} ")
-    # print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} after ")
+
     if fa * fb >= 0:
         raise ValueError("The function values at the interval endpoints must have opposite signs.")
     prev_c = 1000000
-    # i=0
     error=100
-    # while(True):
-    steps.append(f"Step 0: Interval updated: [{a}, {b}] Xr is {round_fig((a + b) / 2,sig_fig)} and Error is {error}")
+    steps.append(f"Step 0: Interval is: [{a}, {b}] and initial Xr is {round_fig((a + b) / 2,sig_fig)}")
+    
     for i in range(max_iter):
         c = round_fig((a + b) / 2,sig_fig)
         fa = round_fig(func(a),sig_fig)
@@ -45,13 +32,12 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
             return c
         
         if error < tolerance:
-            # print(f"here sub with {c} with error equals {error}")
             steps.append(f"Step {i+1}: Approximate root found: {c}")
             return c
         
-        # if prev_c == c:
-            # raise TimeoutError()
-        if(c!=0):
+        if(prev_c==1000000):
+            error=100
+        elif(c!=0):
             error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
         else:
             error=round_fig(abs(((c-prev_c))*100),sig_fig)
@@ -70,18 +56,10 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
                 steps.append(f"Step {i+1}: Approximate root found: {b}")
                 return b
             
-        
         prev_c = c
-        # i+=1
     steps.clear()
     raise ValueError("The method did not converge")
 
-# # Example usage:
-# def f(x):
-#     return x**2 - 4
-
-# root = bisection_method(f, 0, 3)
-# print("Root:", root)
 
 def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
     func_str = func_str.replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
