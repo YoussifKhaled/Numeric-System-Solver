@@ -34,7 +34,7 @@ def false_position(f, a, b, tol, sig_fig,max_iter):
 
         if(prev_c==1000000):
             error=100
-        if(c!=0):
+        elif(c!=0):
             error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
         else:
             error=round_fig(abs(((c-prev_c))*100),sig_fig)
@@ -46,9 +46,11 @@ def false_position(f, a, b, tol, sig_fig,max_iter):
             a = c
         else:
             if fa == 0:
+                print (f"here sub with {a} with function equals {f(a)}")
                 steps.append(f"Step {i+1}: Approximate root found: {a}")
                 return a
             else:
+                print (f"here sub with {b} with function equals {f(b)}")
                 steps.append(f"Step {i+1}: Approximate root found: {b}")
                 return b
             
