@@ -17,11 +17,14 @@ def round_fig(x, n):
 
 def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
     steps.clear() # Clear the steps list
-    # print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} before ")
+    steps.append(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} before ")
     a = round_fig(a, sig_fig)
     b = round_fig(b, sig_fig)
+    fb = round_fig(func(b), sig_fig)
+    fa = round_fig(func(a), sig_fig)
+    # print(f"function of a is {fa} function of b is {fb} ")
     # print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} after ")
-    if round_fig(func(a) * func(b),sig_fig) >= 0:
+    if round_fig(fa * fb,sig_fig) >= 0:
         raise ValueError("The function values at the interval endpoints must have opposite signs.")
     prev_c = 1000000
     # i=0
@@ -30,10 +33,13 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
     steps.append(f"Step 0: Interval updated: [{a}, {b}] Xr is {round_fig((a + b) / 2,sig_fig)} and Error is {error}")
     for i in range(max_iter):
         c = round_fig((a + b) / 2,sig_fig)
-        # print(round_fig(abs(func(c)),sig_fig) )
-        # if round_fig(abs(func(c)),sig_fig) < tolerance:
+        fa = round_fig(func(a),sig_fig)
+        fb = round_fig(func(b),sig_fig)
+        fc = round_fig(func(c),sig_fig)
+        steps.append(f"function of a is {fa} function of b is {fb} function of c is {fc} ")
 
-        if func(c)== 0:
+
+        if fc== 0:
             print(f"here sub with {c} with function equals {func(c)}")
             steps.append(f"Step {i+1}: Approximate root found: {c}")
             return c
@@ -45,13 +51,26 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
         
         # if prev_c == c:
             # raise TimeoutError()
-
-        if round_fig(round_fig(func(a),sig_fig) * round_fig(func(c),sig_fig),sig_fig) < 0:
-            b = c
-        else:
-            a = c
+        
+        if(c==0):
+            raise ValueError("Division by zero encountered!")
+        
         steps.append(f"Step {i+1}: Interval updated: [{a}, {b}] Xr is {c} and Error is {error}")
         error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
+
+        if fa * fc < 0:
+            b = c
+        elif fa * fc > 0:
+            a = c
+        else:
+            if fa == 0:
+                steps.append(f"Step {i+1}: Approximate root found: {a}")
+                return a
+            else:
+                steps.append(f"Step {i+1}: Approximate root found: {b}")
+                return b
+            
+        
         prev_c = c
         # i+=1
     steps.clear()
@@ -75,6 +94,7 @@ def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
         for step in steps:
             print(step)
         print("Root:", root)
+        return steps,root
 
     except TimeoutError as e:
         print("The method did not converge")
