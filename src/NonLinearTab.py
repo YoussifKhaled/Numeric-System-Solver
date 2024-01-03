@@ -421,9 +421,17 @@ class NonLinearTab(QWidget):
             plt.close('all')
 
             # Get the min and max x-values from the user input
-            min_x = float(self.min_x_edit.text())
-            max_x = float(self.max_x_edit.text())
-
+            try:
+                min_x = float(self.min_x_edit.text())
+                max_x = float(self.max_x_edit.text())
+            except ValueError:
+                min_x = -10
+                max_x = 10
+            if min_x >= max_x:
+                self.showErrorMessage('Min x-value must be less than max x-value')
+                return
+           
+            
             # Plot the new expression with the specified range
             p = plot(fx, (x, min_x, max_x), show=False)
             p.title = fx
