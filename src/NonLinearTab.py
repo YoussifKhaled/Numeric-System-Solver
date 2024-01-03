@@ -8,7 +8,7 @@ from matplotlib.figure import Figure
 import re
 from sympy import Symbol, sympify, diff, plot
 from PyQt5.QtWidgets import QMessageBox
-
+from Newton import chef
 
 class NonLinearTab(QWidget):
     def __init__(self):
@@ -129,6 +129,24 @@ class NonLinearTab(QWidget):
         multiplicity_layout.addWidget(self.multiplicity_label)
         multiplicity_layout.addWidget(self.multiplicity_spinbox)
 
+        # Minimum x-value input
+        self.min_x_label = QLabel('Min x-value for the plot:')
+        self.min_x_edit = QLineEdit()
+        min_x_layout = QHBoxLayout()
+        min_x_layout.addWidget(self.min_x_label)
+        min_x_layout.addWidget(self.min_x_edit)
+
+        # Maximum x-value input
+        self.max_x_label = QLabel('Max x-value for the plot:')
+        self.max_x_edit = QLineEdit()
+        max_x_layout = QHBoxLayout()
+        max_x_layout.addWidget(self.max_x_label)
+        max_x_layout.addWidget(self.max_x_edit)
+
+        range_layout = QVBoxLayout()
+        range_layout.addLayout(min_x_layout)
+        range_layout.addLayout(max_x_layout)
+
 
         input_settings_layout = QVBoxLayout()
         input_settings_layout.addLayout(input_mode_layout)
@@ -136,7 +154,6 @@ class NonLinearTab(QWidget):
         input_settings_layout.addLayout(abs_relative_error_layout)
         input_settings_layout.addLayout(significant_digits_layout)
         input_settings_layout.addLayout(multiplicity_layout)
-
         input_settings_groupbox.setLayout(input_settings_layout)
 
         # Equation layout within a group box named "Input"
@@ -166,7 +183,8 @@ class NonLinearTab(QWidget):
         # Solve button
         self.solve_button = QPushButton('Solve')
         self.solve_button.setFixedSize(80, 30)
-        self.solve_button.clicked.connect(self.solve_clicked)
+        self.solve_button.clicked.connect(lambda: self.solve_clicked())
+
 
         input_scroll_area = QScrollArea()
         input_scroll_area.setWidgetResizable(True)
@@ -194,6 +212,7 @@ class NonLinearTab(QWidget):
 
         input_settings_layout.addLayout(initial_guess_layout)
         input_settings_layout.addLayout(second_guess_layout)  # Add second guess layout
+        input_settings_layout.addLayout(range_layout)
 
         # Main layout
         main_layout = QVBoxLayout()
@@ -246,23 +265,82 @@ class NonLinearTab(QWidget):
         return 10 ** -self.current_abs_relative_error
 
     def solve_clicked(self):
-        self.current_method = self.method_combobox.currentText()
-        self.current_max_iterations = self.max_iterations_spinbox.value()
-        self.current_abs_relative_error = self.abs_relative_error_spinbox.value()
-        self.current_significant_digits = self.significant_digits_spinbox.value()
-        # Get multiplicity value
-        self.current_multiplicity = self.multiplicity_spinbox.value()
+        print('Solve clicked')
 
-        self.current_initial_guess = float(self.initial_guess_edit.text())  # Get the initial guess value
-        # Check if the second guess input is visible
-        if self.second_guess_label.isVisible():
-            self.current_second_guess = float(self.second_guess_edit.text())
-        else:
-            self.current_second_guess = None  # Set to None if not applicable
+        try:
+            self.current_method = self.method_combobox.currentText()
+            self.current_max_iterations = self.max_iterations_spinbox.value()
+            self.current_abs_relative_error = self.abs_relative_error_spinbox.value()
+            self.current_significant_digits = self.significant_digits_spinbox.value()
+            self.current_multiplicity = self.multiplicity_spinbox.value()
+            self.current_initial_guess = float(self.initial_guess_edit.text())  # Get the initial guess value
 
-        self.steps_label.setText("Hi")
-        self.answers_label.setText("Hi")
-        equations_text = self.equation_textbox.toPlainText()
+            if self.second_guess_label.isVisible():
+                self.current_second_guess = float(self.second_guess_edit.text())
+            else:
+                self.current_second_guess = None
+
+            print("Method: " + self.current_method)
+            print("Max Iterations: " + str(self.current_max_iterations))
+            print("Abs Relative Error: " + str(self.current_abs_relative_error))
+            print("Significant Digits: " + str(self.current_significant_digits))
+            print("Multiplicity: " + str(self.current_multiplicity))
+            print("Initial Guess: " + str(self.current_initial_guess))
+            print("Second Guess: " + str(self.current_second_guess))
+
+            answer_text = ''
+            steps_text = ''
+
+            if self.current_method == 'Bisection':
+                pass
+            elif self.current_method == 'False-Position':
+                pass
+            elif self.current_method == 'Fixed Point':
+                pass
+            elif self.current_method == 'Original Newton-Raphson':
+                try:
+                    answer, steps = chef('Newton', self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                        self.get_actual_abs_relative_error(), self.current_max_iterations,
+                                        self.current_significant_digits)
+                    answer_text = str(answer)
+                    steps_text = '\n'.join(steps)
+                except Exception as e:
+                    raise ValueError(f'Newton Method Error: {str(e)}')
+
+            elif self.current_method == 'Modified Newton-Raphson1':
+                try:
+                    answer, steps = chef('Modified Newton1', self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                        self.get_actual_abs_relative_error(), self.current_max_iterations,
+                                        self.current_significant_digits, self.current_multiplicity)
+                    answer_text = str(answer)
+                    steps_text = '\n'.join(steps)
+                except Exception as e:
+                    raise ValueError(f'Modified Newton1 Method Error: {str(e)}')
+
+            elif self.current_method == 'Modified Newton-Raphson2':
+                try:
+                    answer, steps = chef('Modified Newton2', self.equation_textbox.toPlainText(), self.current_initial_guess,
+                                        self.get_actual_abs_relative_error(), self.current_max_iterations,
+                                        self.current_significant_digits)
+                    answer_text = str(answer)
+                    steps_text = '\n'.join(steps)
+                except Exception as e:
+                    raise ValueError(f'Modified Newton2 Method Error: {str(e)}')
+
+            elif self.current_method == 'Secant':
+                pass
+
+            self.steps_label.setText(steps_text)
+            self.answers_label.setText(answer_text)
+            equations_text = self.equation_textbox.toPlainText()
+
+        except ValueError as ve:
+            self.showErrorMessage(f'Value Error: {str(ve)}')
+        except Exception as ex:
+            self.showErrorMessage(f'An unexpected error occurred: {str(ex)}')
+
+    def stringify_steps(steps):
+        return '\n'.join(steps)
 
     def show_plot(self):
         Expression = self.equation_textbox.toPlainText()
@@ -276,9 +354,12 @@ class NonLinearTab(QWidget):
             f2x = diff(f1x)
             # Close previous plots
             plt.close('all')
-            # Plot the new expression
-            min_x = -10  # you can take it as input
-            max_x = 10
+
+            # Get the min and max x-values from the user input
+            min_x = float(self.min_x_edit.text())
+            max_x = float(self.max_x_edit.text())
+
+            # Plot the new expression with the specified range
             p = plot(fx, (x, min_x, max_x), show=False)
             p.title = fx
             p.ylabel = ''
