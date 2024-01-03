@@ -15,7 +15,7 @@ steps = []
 def round_fig(x, n):
     return round(x, n - len(str(int(x))))
 
-def bisection_method(func, a, b, tolerance,sig_fig,max_iter=200)  :
+def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
     steps.clear() # Clear the steps list
     # print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} before ")
     a = round_fig(a, sig_fig)
@@ -27,16 +27,19 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=200)  :
     # i=0
     error=100
     # while(True):
+    steps.append(f"Step 0: Interval updated: [{a}, {b}] Xr is {round_fig((a + b) / 2,sig_fig)} and Error is {error}")
     for i in range(max_iter):
         c = round_fig((a + b) / 2,sig_fig)
-        print(round_fig(abs(func(c)),sig_fig) )
+        # print(round_fig(abs(func(c)),sig_fig) )
         # if round_fig(abs(func(c)),sig_fig) < tolerance:
 
-        if round_fig(abs(func(c)),sig_fig) == 0:
+        if func(c)== 0:
+            print(f"here sub with {c} with function equals {func(c)}")
             steps.append(f"Step {i+1}: Approximate root found: {c}")
             return c
         
         if error < tolerance:
+            # print(f"here sub with {c} with error equals {error}")
             steps.append(f"Step {i+1}: Approximate root found: {c}")
             return c
         
@@ -48,8 +51,8 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=200)  :
         else:
             a = c
         steps.append(f"Step {i+1}: Interval updated: [{a}, {b}] Xr is {c} and Error is {error}")
-        prev_c = c
         error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
+        prev_c = c
         # i+=1
     steps.clear()
     raise ValueError("The method did not converge")
@@ -61,13 +64,13 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=200)  :
 # root = bisection_method(f, 0, 3)
 # print("Root:", root)
 
-def main(func_str, a, b, tolerance,sig_fig):
+def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
     
     def f(x):
         return eval(func_str)
     
     try:
-        root = bisection_method(f, a, b,tolerance,sig_fig)
+        root = bisection_method(f, a, b,tolerance,sig_fig,max_iter)
         print("Steps:")
         for step in steps:
             print(step)

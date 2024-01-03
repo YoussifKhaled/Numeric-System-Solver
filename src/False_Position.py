@@ -12,6 +12,7 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
         raise ValueError("The function values at the interval endpoints must have opposite signs.")
     error=100
     prev_c = 1000000
+    steps.append(f"Step 0: Interval updated: [{a}, {b}] Xr is {round_fig((a + b) / 2,sig_fig)} and Error is {error}")
     # i=0
     # while(True):
     for i in range(max_iter):
@@ -35,11 +36,13 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
         else:
             a = c
             fa = fc
-
+            
+        error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
         steps.append(f"Step {i+1}: Interval updated: [{a}, {b}] Xr is {c} and Error is {error}")
         prev_c = c
-        error=round_fig(abs(((c-prev_c)/c)*100),sig_fig)
-    # raise RuntimeError("The method did not converge within the maximum number of iterations.")
+
+    steps.clear()
+    raise RuntimeError("The method did not converge")
 
 
 def main(func_str, a, b, tolerance,sig_fig):
