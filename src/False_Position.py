@@ -64,24 +64,20 @@ def main(func_str, a, b, tolerance,sig_fig):
     def f(x):
         return eval(func_str)
     
-    try:
-        root = false_position(f, a, b,tolerance,sig_fig)
-        print("Steps:")
-        for step in steps:
-            print(step)
-        print("Root:", root)
-        return steps,root
-
-    except TimeoutError as e:
-        print("The method did not converge")
-    except ValueError as e:
-        print("Error:", str(e))
-
-func_str = input("Enter the function: ")
-a = float(input("Enter the first number: "))
-b = float(input("Enter the second number: "))
-tolerance = float(input("Enter the tolerance: "))
-sig_fig = int(input("Enter the number of significant figures: "))
-print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} func_str is {func_str}")
     
-main(func_str, a, b, tolerance,sig_fig)
+    root = false_position(f, a, b,tolerance,sig_fig)
+    print("Steps:")
+    for step in steps:
+        print(step)
+    print("Root:", root)
+    return steps,root
+
+
+# func_str = input("Enter the function: ")
+# a = float(input("Enter the first number: "))
+# b = float(input("Enter the second number: "))
+# tolerance = float(input("Enter the tolerance: "))
+# sig_fig = int(input("Enter the number of significant figures: "))
+# print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} func_str is {func_str}")
+    
+# main(func_str, a, b, tolerance,sig_fig)

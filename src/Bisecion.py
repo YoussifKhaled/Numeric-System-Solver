@@ -62,27 +62,21 @@ def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
 
 
 def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
-    
+    func_str = func_str.replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
     def f(x):
         return eval(func_str)
     
-    try:
-        root = bisection_method(f, a, b,tolerance,sig_fig,max_iter)
-        print("Steps:")
-        for step in steps:
-            print(step)
-        print("Root:", root)
-        return steps,root
+    root = bisection_method(f, a, b,tolerance,sig_fig,max_iter)
+    print("Steps:")
+    for step in steps:
+        print(step)
+    print("Root:", root)
+    return steps,root
 
-    except TimeoutError as e:
-        print("The method did not converge")
-    except ValueError as e:
-        print("Error:", str(e))
-
-func_str = input("Enter the function: ").replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
-a = float(input("Enter the first number: "))
-b = float(input("Enter the second number: "))
-tolerance = float(input("Enter the tolerance: "))
-sig_fig = int(input("Enter the number of significant figures: "))
-print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} func_str is {func_str}")
-main(func_str, a, b, tolerance,sig_fig)
+# func_str = input("Enter the function: ").replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
+# a = float(input("Enter the first number: "))
+# b = float(input("Enter the second number: "))
+# tolerance = float(input("Enter the tolerance: "))
+# sig_fig = int(input("Enter the number of significant figures: "))
+# print(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} func_str is {func_str}")
+# main(func_str, a, b, tolerance,sig_fig)
