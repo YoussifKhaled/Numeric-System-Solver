@@ -2,7 +2,7 @@ import math
 def round_fig(x, n):
     return round(x, n - len(str(int(x))))
 steps = []
-def false_position(f, a, b, tol, sig_fig,max_iter=200):
+def false_position(f, a, b, tol, sig_fig,max_iter):
     
     steps.clear() # Clear the steps list
     fa = round_fig(f(a),sig_fig)
@@ -59,13 +59,13 @@ def false_position(f, a, b, tol, sig_fig,max_iter=200):
     raise RuntimeError("The method did not converge")
 
 
-def main(func_str, a, b, tolerance,sig_fig):
+def main(func_str, a, b, tolerance,sig_fig,max_iter=50):
     func_str=func_str.replace('^', '**').lower().replace('e', 'math.e').replace(' ', '').replace('sin', 'math.sin').replace('cos', 'math.cos').replace('tan', 'math.tan').replace('sqrt', 'math.sqrt')
     def f(x):
         return eval(func_str)
     
     
-    root = false_position(f, a, b,tolerance,sig_fig)
+    root = false_position(f, a, b,tolerance,sig_fig,max_iter)
     print("Steps:")
     for step in steps:
         print(step)

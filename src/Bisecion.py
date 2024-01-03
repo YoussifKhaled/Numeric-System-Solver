@@ -4,7 +4,7 @@ steps = []
 def round_fig(x, n):
     return round(x, n - len(str(int(x))))
 
-def bisection_method(func, a, b, tolerance,sig_fig,max_iter=50)  :
+def bisection_method(func, a, b, tolerance,sig_fig,max_iter)  :
     steps.clear() 
     steps.append(f"a is {a} b is {b} tolerance is {tolerance} sig_fig is {sig_fig} before ")
     a = round_fig(a, sig_fig)
