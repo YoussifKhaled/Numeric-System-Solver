@@ -328,7 +328,7 @@ class NonLinearTab(QWidget):
                     answer_text = str(answer)
                     steps_text = self.stringify_steps(steps)
                 except ValueError as e:
-                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'false_position Method Error: {str(e)}')
                 except Exception as e:
                     self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
             elif self.current_method == 'Fixed Point':
@@ -342,7 +342,7 @@ class NonLinearTab(QWidget):
                         raise ValueError('This system of equations will not converge')
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
-                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'Fixed Point Method Error: {str(e)}')
                 except Exception as e:
                     self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
@@ -354,7 +354,7 @@ class NonLinearTab(QWidget):
                     answer_text = str(answer)
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
-                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'Original Newton-Raphson Method Error: {str(e)}')
                 except Exception as e:
                     self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
@@ -366,7 +366,7 @@ class NonLinearTab(QWidget):
                     answer_text = str(answer)
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
-                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'Modified Newton-Raphson1 Method Error: {str(e)}')
                 except Exception as e:
                     self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
@@ -378,7 +378,7 @@ class NonLinearTab(QWidget):
                     answer_text = str(answer)
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
-                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'Modified Newton-Raphson2 Method Error: {str(e)}')
                 except Exception as e:
                     self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
 
@@ -391,7 +391,7 @@ class NonLinearTab(QWidget):
                         raise ValueError('This system of equations will not converge')
                     steps_text = '\n'.join(steps)
                 except ValueError as e:
-                    self.showErrorMessage(f'Bisection Method Error: {str(e)}')
+                    self.showErrorMessage(f'Secant Method Error: {str(e)}')
                 except Exception as e:
                     self.showErrorMessage(f'An unexpected error occurred: {str(e)}')
                     
